@@ -1,0 +1,13 @@
+
+/* resources/css/app.css */
+body {
+    background: linear-gradient(to bottom, #e0f2f1, #ffffff, #b0b0b0); /* Dégradé du vert très clair au blanc, puis au gris */
+    background-size: cover; /* Assure que l'arrière-plan couvre toute la zone */
+    background-position: center; /* Centre l'arrière-plan */
+    font-family: 'Arial', sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Ajoutez d'autres styles ici */

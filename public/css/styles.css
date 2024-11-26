@@ -1,0 +1,67 @@
+/* Styles pour le wrapper */
+.wrapper {
+    border: 5px solid #4caf50; /* Cadre du tableau */
+    padding: 20px;
+    width: 90%;
+    max-width: 1200px; /* Assurez-vous que le cadre ne dépasse pas */
+    margin: 20px auto; /* Centre le cadre sur la page */
+    background-color: white;
+}
+
+/* Styles pour le tableau */
+.table-container {
+    overflow-x: auto; /* Ajoute une barre de défilement horizontale si nécessaire */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse; /* Évite les bordures doubles */
+}
+
+thead th {
+    position: -webkit-sticky; /* Pour Safari */
+    position: sticky;
+    top: 0; /* Fixe l'en-tête en haut */
+    background-color: #f2f2f2; /* Fond pour l'en-tête */
+    border-bottom: 2px solid #4caf50; /* Ligne de séparation pour une meilleure visibilité */
+    z-index: 10; /* Assurez-vous que l'en-tête est au-dessus du contenu */
+    text-align: left; /* Alignement du texte */
+    padding: 10px; /* Ajoute un peu d'espace autour du texte */
+}
+
+tbody td {
+    
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Styles pour les boutons */
+button {
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 5px;
+    display: inline-block; /* Pour que les boutons s'alignent côte à côte */
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+form button {
+    background-color: #f44336;
+}
+
+form button:hover {
+    background-color: #e53935;
+}
+
+/* Assure que les boutons dans le formulaire sont alignés côte à côte */
+.button2, .button3 {
+    display: inline-block;
+    margin-right: 5px;
+}

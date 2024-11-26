@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Application Vue</title>
+    <link rel="stylesheet" href="/dist/assets/style.css">
+</head>
+<body>
+    <div id="app">
+        <nav>
+            <button @click="currentView = 'GestionCourrier'">Gestion de courrier</button>
+            <button @click="currentView = 'GestionDecharges'">Gestion de décharges</button>
+            <button @click="currentView = 'Historique'">Historique</button>
+        </nav>
+        <component :is="ViewComponent"></component>
+    </div>
+    <script type="module" src="/dist/assets/app.js"></script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Application Vue</title>
+    <link rel="stylesheet" href="/build/assets/style.css">
+</head>
+<body>
+    <div id="app"></div>
+    <script type="module" src="/build/assets/app.js"></script>
+</body>
+</html>
