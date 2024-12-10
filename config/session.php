@@ -31,7 +31,6 @@ return [
     | indicate that via the expire_on_close configuration option.
     |
     */
-'secure' => env('SESSION_SECURE_COOKIE', false),
 
     'lifetime' => env('SESSION_LIFETIME', 120),
 
@@ -170,7 +169,7 @@ return [
     |
     */
 
-    
+    'secure' => env('SESSION_SECURE_COOKIE'),
 
     /*
     |--------------------------------------------------------------------------

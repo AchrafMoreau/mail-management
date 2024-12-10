@@ -1,60 +1,228 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="css/app.css">
-    <title>Login</title>
-    <style>
-        body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif; }
-    </style>
-</head>
-<body class="bg-white dark:bg-gray-50">
-    <div class="flex justify-center h-screen">
-        <div class="hidden md:block md:w-2/4" style="background: linear-gradient(180deg, #2EA154 0%, #54B435 68.75%)">
-            <div class="flex items-center justify-center w-full h-screen p-8">
-                <img src="images/Logo.png" alt="Modern building architecture">
-            </div>
-        </div>
-        <div class="flex items-center w-full h-screen max-w-md px-6 mx-auto md:w-2/4">
-            <div class="flex-1">
-                <div class="text-center pb-4">
-                    <h2 class="text-6xl font-bold text-center text-gray-700 pb-4 text-green-600">Login</h2>
-                </div>
-                <div class="mt-8">
-                    <form action="{{ url('/login') }}" method="POST">
-                        @csrf
-                        <div class="mt-6 flex items-center bg-gray-100 rounded-md px-4 py-2 mt-2 mb-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
-                            </svg>
-                            <input type="email" name="email" id="email" placeholder="Email" class="block w-full pl-3 text-gray-700 placeholder-gray-400 bg-gray-100 rounded-md @error('email') border-red-500 @enderror" value="{{ old('email') }}">
-                            <!-- Ne pas afficher l'erreur ici -->
-                        </div>
-                        <div class="mt-6 flex items-center bg-gray-100 rounded-md px-4 py-2 mt-2 mb-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
-                            </svg>
-                            <input type="password" name="password" id="password" placeholder="Password" class="block w-full pl-3 text-gray-700 placeholder-gray-400 bg-gray-100 rounded-md @error('password') border-red-500 @enderror">
-                            <!-- Ne pas afficher l'erreur ici -->
-                        </div>
-                        <div class="mt-6 flex justify-center">
-                            <button type="submit" class="w-48 px-4 py-2 tracking-wide text-white transition-colors duration-200 transform rounded-md bg-green-600 hover:bg-green-400 focus:outline-none focus:bg-green-400 focus:ring focus:ring-green-300 focus:ring-opacity-50">
-                                Login
-                            </button>
-                        </div>
-                        <!-- Afficher un seul message d'erreur en bas -->
-                        @if ($errors->any())
-                            <div class="mt-4 text-center text-red-500">
-                                {{ $errors->first() }}
+@extends('layouts.master')
+@section('title')
+    @lang('translation.dashboards')
+@endsection
+@section('css')
+    <link href="{{ URL::asset('build/libs/jsvectormap/css/jsvectormap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ URL::asset('build/libs/swiper/swiper-bundle.min.css') }}" rel="stylesheet" type="text/css" />
+    <script src="https://kit.fontawesome.com/5fff77269d.js" crossorigin="anonymous"></script>
+@endsection
+@section('content')
+    <div class="row">
+        <div class="col">
+
+            <div class="h-100">
+                <div class="row mb-3 pb-1">
+                    <div class="col-12">
+                        <div class="d-flex align-items-lg-center flex-lg-row flex-column">
+                            <div class="flex-grow-1">
+                                <h4 class="fs-16 mb-1 text-capitalize">@lang('translation.goodMorning') {{ Auth::user()->name  }} </h4>
+                                <p class="text-muted mb-0">@lang('translation.morningMessage')</p>
                             </div>
-                        @endif
-                    </form>
+                        </div><!-- end card header -->
+                    </div>
+                    <!--end col-->
                 </div>
-            </div>
-        </div>
+                <!--end row-->
+
+                <div class="row">
+                    <div class="col-xl-3 col-md-6">
+                        <!-- card -->
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">
+                                            @lang('translation.totalMails')
+                                        </p>
+                                    </div>
+                                    <div class="flex-shrink-0" id="totalMailPersentage">
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-end justify-content-between mt-4">
+                                    <div>
+                                        <h4 class="fs-20 fw-semibold ff-secondary mb-4"><span class="counter-value total-mail"
+                                                data-target="122">0</span></h4>
+                                        <a href="{{ url('/courrire')}}" class="text-decoration-underline">@lang('translation.viewTotalMails')</a>
+                                    </div>
+                                    <div class="avatar-sm flex-shrink-0" >
+                                        <span class="avatar-title bg-secondary-subtle rounded fs-3">
+                                            <i class="ri-mail-send-line text-secondary"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+
+                    <div class="col-xl-3 col-md-6">
+                        <!-- card -->
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">@lang("translation.entrantMails")</p>
+                                    </div>
+                                    <div class="flex-shrink-0" id="entrantMailPersentage">
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-end justify-content-between mt-4">
+                                    <div>
+                                        <h4 class="fs-20 fw-semibold ff-secondary mb-4"><span class="counter-value entrant-mail"
+                                                data-target="100">0</span></h4>
+                                        <a href="{{ url("/entrant-courrire") }}" class="text-decoration-underline">@lang('translation.viewEntantMails')</a>
+                                    </div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title bg-primary-subtle rounded fs-3">
+                                            <i class="ri-inbox-archive-line text-primary"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+
+                    <div class="col-xl-3 col-md-6">
+                        <!-- card -->
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">@lang('translation.sortantMails')</p>
+                                    </div>
+                                    <div class="flex-shrink-0" id="sortantMailPersentage">
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-end justify-content-between mt-4">
+                                    <div>
+                                        <h4 class="fs-20 fw-semibold ff-secondary mb-4"><span class="counter-value sortant-mail"
+                                                data-target="100">0</span></h4>
+                                        <a href="{{ url("/sortant-courrire") }}" class="text-decoration-underline">@lang('translation.viewSortantMails')</a>
+                                    </div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title bg-success-subtle rounded fs-3">
+                                            <i class="ri-inbox-unarchive-line text-success"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+
+                    <div class="col-xl-3 col-md-6">
+                        <!-- card -->
+                        <div class="card card-animate">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <p class="text-uppercase fw-medium text-muted text-truncate mb-0">@lang("translation.totalDecharge")</p>
+                                    </div>
+                                    <div class="flex-shrink-0" id="totalDecharge">
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-end justify-content-between mt-4">
+                                    <div>
+                                        <h4 class="fs-20 fw-semibold ff-secondary mb-4"><span class="counter-value total-decharge"
+                                                data-target="100">0</span></h4>
+                                        <a href="{{ url("/decharge") }}" class="text-decoration-underline">@lang("translation.viewTotalDecharge")</a>
+                                    </div>
+                                    <div class="avatar-sm flex-shrink-0">
+                                        <span class="avatar-title bg-warning-subtle rounded fs-3">
+                                            <i class="ri-file-paper-2-line text-warning"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div><!-- end card body -->
+                        </div><!-- end card -->
+                    </div><!-- end col -->
+                </div> <!-- end row-->
+
+                {{-- <div class="row">
+                    <div class="col-xl-12">
+                        <div class="card card-height-100">
+                            <div class="card-header align-items-center d-flex">
+                                <h4 class="card-title mb-0 flex-grow-1">Store Visits by Source</h4>
+                                <div class="flex-shrink-0">
+                                    <div class="dropdown card-header-dropdown">
+                                        <a class="text-reset dropdown-btn" href="#" data-bs-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <span class="text-muted">Report<i
+                                                    class="mdi mdi-chevron-down ms-1"></i></span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a class="dropdown-item" href="#">Download Report</a>
+                                            <a class="dropdown-item" href="#">Export</a>
+                                            <a class="dropdown-item" href="#">Import</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- end card header -->
+
+                            <div class="card-body">
+                                <div id="store-visits-source"
+                                    data-colors='["--vz-primary", "--vz-success", "--vz-secondary", "--vz-info", "--vz-warning"]'
+                                    class="apex-charts" dir="ltr"></div>
+                            </div>
+                        </div> <!-- .card-->
+                    </div> <!-- .col-->
+
+                </div> <!-- end row--> --}}
+
+            </div> <!-- end .h-100-->
+
+        </div> <!-- end col -->
+
     </div>
-</body>
-</html>
+@endsection
+@section('script')
+    <!-- apexcharts -->
+    <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/jsvectormap/js/jsvectormap.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/jsvectormap/maps/world-merc.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/swiper/swiper-bundle.min.js') }}"></script>
+    <!-- dashboard init -->
+    <script src="{{ URL::asset('build/js/pages/dashboard-ecommerce.init.js') }}"></script>
+    <script src="{{ URL::asset('build/js/app.js') }}"></script>
+    
+    <script>
+        $(document).ready(function(){
+            $.get('/total-mail-persentage', function(response){
+                const card = $("#totalMailPersentage");
+                const target = $(".total-mail");
+                MarkStatus(card, response.totalPersentage, target, response.total)
+            })
+            $.get('/entrant-mail-persentage', function(response){
+                const card = $("#entrantMailPersentage");
+                const target = $(".entrant-mail");
+                MarkStatus(card, response.totalPersentage, target, response.total)
+            })
+            $.get('/sortant-mail-persentage', function(response){
+                const card = $("#sortantMailPersentage");
+                const target = $(".sortant-mail");
+                MarkStatus(card, response.totalPersentage, target, response.total)
+            })
+            $.get('/total-decharge-persentage', function(response){
+                const card = $("#totalDecharge");
+                const target = $(".total-decharge");
+                MarkStatus(card, response.totalPersentage, target, response.total)
+            })
+        })
+
+        function MarkStatus(domElement, persentage, targetDom, total){
+            const up = `<h5 class="text-success fs-14 mb-0">
+                    <i class="ri-arrow-right-up-line fs-13 align-middle"></i> `
+            const down = `<h5 class="text-danger fs-14 mb-0">
+                    <i class="ri-arrow-right-down-line fs-13 align-middle"></i> `
+            const stable = `<h5 class="text-muted fs-14 mb-0"> `
+            targetDom.attr("data-target", total)
+            if(persentage > 0) {
+                domElement.html(up + persentage + " % </h5>") 
+            }else if(persentage < 0){
+                domElement.html(down + persentage + " % </h5>")
+            }else{
+                domElement.html(stable + "+ " + persentage + " % </h5>")
+            }
+        }
+    </script>
+@endsection
+

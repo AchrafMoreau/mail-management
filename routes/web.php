@@ -1,91 +1,52 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PageController;
-use App\Http\Controllers\CourrierController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\CourrireController;
+use App\Http\Controllers\FileUploadController;
 use App\Http\Controllers\DechargeController;
-use App\Http\Controllers\HomeController;
+use App\Http\Controllers\TempFileController;
+use App\Http\Controllers\EmetteurController;
+use Illuminate\Support\Facades\Route;
 
-// Route pour afficher la liste des courriers
+Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
+Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');
 
-Route::middleware("admin")->group(function() {
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
-    Route::get('/gestion_courrier', [PageController::class, 'gestionCourriers'])->name('gestion_courrier');
-    Route::get('/search-courriers', [CourrierController::class, 'search'])->name('courriers.search');
-    Route::get('/historique-courriers', [CourrierController::class, 'historique'])->name('historique_courriers');
-    Route::resource('/courriers', CourrierController::class)->names([
-        'index' => 'courriers.index',
-        'create' => 'courriers.create',
-        'store' => 'courriers.store',
-        'edit' => 'courriers.edit',
-        'update' => 'courriers.update',
-        'destroy' => 'courriers.destroy',
-        'show' => 'courriers.show'
-    ]);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
-    Route::get('/gestion_decharges', [PageController::class, 'gestionDecharges'])->name('gestion_decharges');
-    Route::get('/decharges/search', [DechargeController::class, 'search'])->name('decharges.search');
-    Route::get('/historique_decharges', [DechargeController::class, 'historique'])->name('historique_decharges');
-    Route::resource("/decharges", DechargeController::class)->names([
-        'create' => 'decharges.create',
-        'store' => 'decharges.store',
-        'edite' => "decharges.edit",
-        'update' => "decharges.update",
-        'destory' => "decharges.destroy",
-        'index' => 'decharges.index',
-        'show' => "decharges.show",
-    ]);
 
-    Route::get('/', function () {
-        return view('pagepremier');
-    })->name('pagepremier');
+Route::middleware(['auth', 'clearNotification'])->group(function () {
 
-    Route::get('/historique', [PageController::class, 'historique'])->name('historique');
-    Route::get('/home', [HomeController::class, 'getStats'])->name('home');
+    Route::resource("/courrire", CourrireController::class);
+    Route::get("/entrant-courrire", [CourrireController::class, "entantCourrire"]);
+    Route::get("/sortant-courrire", [CourrireController::class, "sortantCourrire"]);
+    Route::delete("/courrire-deleteMany", [CourrireController::class, "deleteMany"]);
+
+    Route::resource("/decharge", DechargeController::class);
+    Route::delete("/decharge-deleteMany", [DechargeController::class, 'deleteMany']);
+    Route::get("/dechargeJson", [DechargeController::class, 'json']);
+
+    Route::resource("/emetteur", EmetteurController::class);
+    Route::delete("/emetteur-deleteMany", [EmetteurController::class, 'deleteMany']);
+    Route::get("/emetteurJson", [EmetteurController::class, 'json']);
+
+    Route::controller(TempFileController::class)->group(function(){
+        Route::match(['post','delete'],'/uploads','index');
+    });
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/total-mail-persentage', [CourrireController::class, 'getTotalMailPersentage']);
+    Route::get('/entrant-mail-persentage', [CourrireController::class, 'getEntrantMailPersentage']);
+    Route::get('/sortant-mail-persentage', [CourrireController::class, 'getSortantMailPersentage']);
+    Route::get('/total-decharge-persentage', [DechargeController::class, 'getTotalDechargePersentage']);
 });
 
-// Route pour afficher la page d'accueil après la connexion
-
-// Route POST pour traiter la redirection après la connexion
-Route::post('/pagepremier', function () {
-    return view('pagepremier');
-})->name('pagepremier.post');
-
-// Route::get('/', [DashboardController::class, 'index'])->name("dashboard");
-
-
-// Route pour afficher les statistiques
-
-// Route::get('/decharges/{id}', [DechargeController::class, 'show'])->name('decharges.show');
-
-// Routes pour les autres pages gérées par PageController
-
-
 require __DIR__.'/auth.php';
-
-
-    // Route::get('/courriers', [CourrierController::class, 'index'])->name('courriers.index');
-
-    // Route::get('/courriers/creat', [CourrierController::class, 'create'])->name('courriers.creat');
-    // Route::post('/courriers', [CourrierController::class, 'store'])->name('courriers.store');
-    // Route::get('/courriers/create', [CourrierController::class, 'create'])->name('courriers.create');
-
-    // Route::get('/courriers/{id}/edit', [CourrierController::class, 'edit'])->name('courriers.edit');
-
-    // Route::put('/courriers/{id}', [CourrierController::class, 'update'])->name('courriers.update');
-
-    // Route::delete('/courriers/{id}', [CourrierController::class, 'destroy'])->name('courriers.destroy');
-    // Route::get('/courriers/{id}', [CourrierController::class, 'show'])->name('courriers.show');
-
-    // Route::get('/decharges/create', [DechargeController::class, 'create'])->name('decharges.create');
-
-    // Route::post('/decharges', [DechargeController::class, 'store'])->name('decharges.store');
-
-    // Route::get('/decharges/{id}/edit', [DechargeController::class, 'edit'])->name('decharges.edit');
-
-    // Route::put('/decharges/{id}', [DechargeController::class, 'update'])->name('decharges.update');
-    // Route::delete('/decharges/{id}', [DechargeController::class, 'destroy'])->name('decharges.destroy');
-
-    // Route::get('/decharges', [DechargeController::class, 'index'])->name('decharges.index');

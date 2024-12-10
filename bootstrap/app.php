@@ -10,11 +10,16 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-
     ->withMiddleware(function (Middleware $middleware) {
         //
+
+        $middleware->appendToGroup(
+            'web', [
+                \App\Http\Middleware\Localization::class,
+                \App\Http\Middleware\ClearNotification::class,
+            ]);
         $middleware->alias([
-            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            "clearNotification" => \App\Http\Middleware\ClearNotification::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
