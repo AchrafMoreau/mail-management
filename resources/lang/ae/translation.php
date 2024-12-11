@@ -1,5 +1,9 @@
 <?php
 return [
+    "welcomeBack" => "مرحبًا بعودتك",
+    "SignintocontinuetoABH" => "قم بتسجيل الدخول للمتابعة إلى وكالة الحوض الهيدروليكي",
+    "Username" => "اسم المستخدم",
+    "password" => "كلمة المرور",
     "fillAllField" => "يرجى ملء جميع الحقول",
     "passwordDoesntMatch" => "كلمات المرور غير متطابقة",
     "incorecctPass" => "كلمة المرور غير صحيحة",

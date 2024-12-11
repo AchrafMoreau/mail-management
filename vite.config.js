@@ -34,10 +34,10 @@ export default defineConfig({
         laravel(
             {
                 input: [
-                    'resources/css/bootstrap.css',
+                    'resources/scss/bootstrap.scss',
                     'resources/scss/icons.scss',
-                    'resources/css/app.css',
-                    'resources/css/custom.css',
+                    'resources/scss/app.scss',
+                    'resources/scss/custom.scss',
                 ],
                 refresh: true
             }

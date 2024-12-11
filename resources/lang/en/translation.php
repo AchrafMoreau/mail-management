@@ -1,5 +1,9 @@
 <?php
 return [
+    "welcomeBack" => "Welcome back",
+    "SignintocontinuetoABH" => "Sign in to continue to the Hydraulic Basin Agency",
+    "Username" => "Username",
+    "password" => "Password",
     "fillAllField" => "Please fill in all fields",
     "passwordDoesntMatch" => "The passwords do not match",
     "incorecctPass" => "Incorrect password",

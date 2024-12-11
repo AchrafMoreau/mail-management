@@ -42,9 +42,9 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        Emetteur::factory(10)->create();
-        Courrire::factory(100)->create();
-        Decharge::factory(10)->create();
+        // Emetteur::factory(10)->create();
+        // Courrire::factory(100)->create();
+        // Decharge::factory(10)->create();
         
         $this->command->info('Seeder imported successfully!');
         

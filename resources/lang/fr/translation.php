@@ -1,5 +1,9 @@
 <?php
 return [
+    "welcomeBack" => "Bon retour",
+    "SignintocontinuetoABH" => "Connectez-vous pour continuer vers l'Agence du Bassin Hydraulique",
+    "Username" => "Nom d'utilisateur",
+    "password" => "Mot de passe",
     "fillAllField" => "Veuillez remplir tous les champs",
     "passwordDoesntMatch" => "Les mots de passe ne correspondent pas",
     "incorecctPass" => "Mot de passe incorrect",
