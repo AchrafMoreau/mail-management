@@ -1,5 +1,14 @@
 <!doctype html >
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-layout="vertical" data-topbar="light" data-sidebar="dark" data-sidebar-size="lg" data-sidebar-image="none" data-preloader="disable">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" 
+    data-layout="vertical"
+    data-topbar="{{ optional(Auth::user()->setting)->data_topbar ?? "light" }}" 
+    data-sidebar="{{ optional(Auth::user()->setting)->data_sidebar ?? "dark" }}" 
+    data-sidebar-size="lg" 
+    data-sidebar-image="none" 
+    data-preloader="disable"
+    data-layout-position="{{  optional(Auth::user()->setting)->data_layout_position ?? "fixed" }}"
+    data-bs-theme="{{  optional(Auth::user()->setting)->data_bs_theme ?? "light" }}"
+>
 
 <head>
     <meta charset="utf-8" />

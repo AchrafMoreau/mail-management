@@ -48,9 +48,10 @@
                                                     value="option">
                                             </div>
                                         </th>
+                                        <th  data-sort="id">ID</th>
                                         <th  data-sort="object">@lang("translation.object")</th>
-                                        <th  data-sort="division">@lang("translation.division")</th>
-                                        <th  data-sort="emetteur">@lang("translation.emetteur")</th>
+                                        {{-- <th  data-sort="division">@lang("translation.division")</th> --}}
+                                        {{-- <th  data-sort="emetteur">@lang("translation.emetteur")</th> --}}
                                         <th  data-sort="reception-jour">@lang("translation.reception-jour")</th>
                                         <th  data-sort="type">@lang("translation.type")</th>
                                         <th  data-sort="action">@lang("translation.action")</th>
@@ -65,11 +66,11 @@
                                                     value="option1">
                                             </div>
                                         </th>
-                                        <td class="id" style="display:none;"><a href="javascript:void(0);"
+                                        <td class="id"><a href="{{ url('courrire/'. $cour->id )}}"
                                                 class="fw-medium link-primary">{{ $cour->id }}</a></td>
                                         <td class="object">{{ $cour->object }}</td>
-                                        <td class="division">{{ $cour->division }}</td>
-                                        <td class="emetteur">{{ $cour->emetteur->nom }}</td>
+                                        {{-- <td class="division">{{ $cour->division }}</td> --}}
+                                        {{-- <td class="emetteur">{{ optional($cour->destination)->nom ? optional($cour->destination)->nom : optional($cour->expediteur)->nom }}</td> --}}
                                         <td class="reception-jour">{{ $cour->reception_jour }}</td>
                                         <td class="type">
                                             @if($cour->type == "ENTRANT")

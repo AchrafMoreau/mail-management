@@ -11,15 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('decharges', function (Blueprint $table) {
+        Schema::create('expediteurs', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->date('reception_jour');
-            $table->unsignedBigInteger('etat_id')->nullable();
-            $table->foreign('etat_id')->references('id')->on('regions')->onDelete('cascade')->onUpdate('cascade');
+            $table->string('adresse')->nullable();
             $table->unsignedBigInteger('ville_id');
             $table->foreign('ville_id')->references('id')->on('villes')->onDelete('cascade')->onUpdate('cascade');
-            $table->string('document')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->string('zip')->nullable();
             $table->timestamps();
         });
     }
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('decharges');
+        Schema::dropIfExists('expediteurs');
     }
 };

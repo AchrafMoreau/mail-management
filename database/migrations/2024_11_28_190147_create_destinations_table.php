@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('emetteurs', function (Blueprint $table) {
+        Schema::create('destinations', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
             $table->string('adresse')->nullable();
-            // $table->string('city')->nullable();
             $table->unsignedBigInteger('ville_id');
             $table->foreign('ville_id')->references('id')->on('villes')->onDelete('cascade')->onUpdate('cascade');
             $table->string('phone')->nullable();
+            $table->string('email')->nullable();
             $table->string('zip')->nullable();
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('emetteurs');
+        Schema::dropIfExists('destinations');
     }
 };

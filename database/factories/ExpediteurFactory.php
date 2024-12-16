@@ -6,9 +6,9 @@ use App\Models\Ville;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Emetteur>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Expediteur>
  */
-class EmetteurFactory extends Factory
+class ExpediteurFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,13 +18,12 @@ class EmetteurFactory extends Factory
     public function definition(): array
     {
         return [
-            //
             'nom' => $this->faker->username(),
             'adresse' => $this->faker->address(),
             'ville_id' => Ville::inRandomOrder()->value('id'),
             'phone' => $this->faker->e164PhoneNumber(),
-            'zip' => 81000
+            'zip' => 81000,
+            'email' => $this->faker->email()
         ];
-
     }
 }

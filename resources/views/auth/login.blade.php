@@ -98,7 +98,7 @@
                         <div class="text-center">
                             <script>
                                 document.write(new Date().getFullYear())
-                            </script> Agence du Bassin Hydraulique de Draa Oued Noun. Crafted with <i
+                            </script>Maroc Meteo Crafted with <i
                                     class="mdi mdi-heart text-danger"></i> Moreau</p>
                         </div>
                     </div>

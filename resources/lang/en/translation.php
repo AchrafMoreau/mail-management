@@ -1,7 +1,10 @@
 <?php
 return [
+    "id" => "Identifier",
+    "reset" => "Reset",
+    "themeSetting" => "Theme Settings",
     "welcomeBack" => "Welcome back",
-    "SignintocontinuetoABH" => "Sign in to continue to the Hydraulic Basin Agency",
+    "SignintocontinuetoABH" => "Sign in to continue to the Morocco Weather",
     "Username" => "Username",
     "password" => "Password",
     "fillAllField" => "Please fill in all fields",
@@ -79,9 +82,11 @@ return [
     "date" => "Date",
     "time" => "Time",
     "submit" => "Submit",
-    "courrire" => "Mail",
-    "decharge" => "Receipt",
-    "emetteur" => "Sender",
+
+    "courrire" => "Couriers",
+    "mail" => "Mails",
+    "destinations" => "Destinations",
+    "expediteur" => "Senders",
 
     // ------------------- from here
     "menu"=>"Menu",

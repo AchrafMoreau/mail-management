@@ -3,9 +3,9 @@
 
     <head>
     <meta charset="utf-8" />
-    <title>@yield('title') | {{ Auth::user()->setting->name }} </title>
+    <title>@yield('title') | Maroc Meteo </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="{{ Auth::user()->setting->name }}" name="description" />
+    <meta content="Maroc Meteo" name="description" />
     <meta content="Achraf Moreau" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ URL::asset('build/images/logo-sm.png')}}">

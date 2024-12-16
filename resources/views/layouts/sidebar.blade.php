@@ -47,19 +47,24 @@
                 <li class="menu-title"><i class="ri-more-fill"></i> <span>@lang('translation.pages')</span></li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/courrire" role="button" >
-                        <i data-feather="layout" class="icon-dual"></i> <span>@lang('translation.courrire')</span>
+                    <a class="nav-link menu-link" href="{{ url("/courrire")}}" role="button" >
+                        <i class="ri-archive-line"></i> <span>@lang('translation.courrire')</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link menu-link" href="{{ url('/mail' )}}" role="button" >
+                        <i class=" ri-mail-line"></i> <span>@lang('translation.mail')</span>
                     </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/decharge" role="button" >
-                        <i data-feather="layout" class="icon-dual"></i> <span>@lang('translation.decharge')</span>
+                    <a class="nav-link menu-link" href="{{ url('destination') }}" role="button" >
+                        <i class=" ri-inbox-archive-line"></i> <span>@lang('translation.destinations')</span>
                     </a>
                 </li> <!-- end Dashboard Menu -->
                 <li class="nav-item">
-                    <a class="nav-link menu-link" href="/emetteur" role="button" >
-                        <i data-feather="layout" class="icon-dual"></i> <span>@lang('translation.emetteur')</span>
+                    <a class="nav-link menu-link" href="{{ url("expediteur") }}" role="button" >
+                        <i class="ri-inbox-unarchive-line"></i> <span>@lang('translation.expediteur')</span>
                     </a>
                 </li> <!-- end Dashboard Menu -->
             </ul>

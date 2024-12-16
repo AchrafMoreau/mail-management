@@ -29,7 +29,8 @@
                 <div class="card-body ">
                     <div class="tab-content">
                         <div class="tab-pane active" id="personalDetails" role="tabpanel">
-                            <div class="sm-w-[50%] p-0">
+                            
+                            <div class="p-0">
                                 <form action="{{ url("setting/". Auth::id() ) }}" method="POST">
                                     @csrf
                                     @method("PUT")
@@ -41,21 +42,14 @@
                                     <div class="p-4">
                                         <label for="region-field" class="form-label">@lang("translation.region")</label>
                                         <select class="form-control" data-trigger name="region" id="region-field" >
-                                            {{-- <option value="">@lang('translation.select-region')</option> --}}
                                             @foreach($regions  as $region)
-                                                @if($region->id == $settings->region_id)
-                                                    <option value="{{ $region->id }}" selected>{{ $region->region }}</option>
-                                                @else
-                                                    <option value="{{ $region->id }}" >{{ $region->region }}</option>
-                                                @endif
+                                                    <option value="{{ $region->id }}" {{ $region->id == $settings->region_id ? "selected" : ""}}>{{ $region->region }}</option> 
                                             @endforeach
                                         </select>
                                     </div>
                                     <div class="offcanvas-footer border-top p-3 text-center">
                                         <div class="row">
-                                            <div class="col-6">
-                                                <button type="button" class="btn btn-light w-100" id="reset-layout">@lang("translation.reset")</button>
-                                            </div>
+                                            <div class="col-6"></div>
                                             <div class="col-6">
                                                 <button type="submit" class="btn btn-primary w-100">@lang("translation.submit")</button>
                                             </div>
@@ -69,7 +63,8 @@
                                 @csrf
                                 @method("PUT")
                                 <div data-simplebar class="h-100">
-                                    <div class="p-4">
+                                    <div class="col-lg-6 col-xl-6 col-xxl-6 col-12 p-4">
+                                        <input type="text" name="theme" value="true" hidden>
                                         <h6 class="mt-4 mb-0 fw-semibold text-uppercase">Color Scheme</h6>
                                         <p class="text-muted">Choose Light or Dark Scheme.</p>
                                         <div class="colorscheme-cardradio">
@@ -256,29 +251,6 @@
                                                     </div>
                                                     <h5 class="fs-13 text-center mt-2">Dark</h5>
                                                 </div>
-                                                <div class="col-4">
-                                                    <button class="btn btn-link avatar-md w-100 p-0 overflow-hidden border collapsed"
-                                                        type="button" data-bs-toggle="collapse" data-bs-target="#collapseBgGradient"
-                                                        aria-expanded="false" aria-controls="collapseBgGradient">
-                                                        <span class="d-flex gap-1 h-100">
-                                                            <span class="flex-shrink-0">
-                                                                <span class="bg-vertical-gradient d-flex h-100 flex-column gap-1 p-1">
-                                                                    <span class="d-block p-1 px-2 bg-light-subtle rounded mb-2"></span>
-                                                                    <span class="d-block p-1 px-2 pb-0 bg-light-subtle"></span>
-                                                                    <span class="d-block p-1 px-2 pb-0 bg-light-subtle"></span>
-                                                                    <span class="d-block p-1 px-2 pb-0 bg-light-subtle"></span>
-                                                                </span>
-                                                            </span>
-                                                            <span class="flex-grow-1">
-                                                                <span class="d-flex h-100 flex-column">
-                                                                    <span class="bg-light d-block p-1"></span>
-                                                                    <span class="bg-light d-block p-1 mt-auto"></span>
-                                                                </span>
-                                                            </span>
-                                                        </span>
-                                                    </button>
-                                                    <h5 class="fs-13 text-center mt-2">Gradient</h5>
-                                                </div>
                                             </div>
                                             <!-- end row -->
 
@@ -332,7 +304,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                                 
                         </div>
                        

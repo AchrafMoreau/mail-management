@@ -2,16 +2,13 @@
 
 namespace Database\Factories;
 
-use App\Models\Region;
+use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Ville;
 
-// use App\Models\Emetteur;
-use Illuminate\Database\Eloquent\Factories\Factory;
-
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Decharge>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Destination>
  */
-class DechargeFactory extends Factory
+class DestinationFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -23,10 +20,11 @@ class DechargeFactory extends Factory
         return [
             //
             'nom' => $this->faker->username(),
-            'reception_jour' => $this->faker->date(),
-            'etat_id' => Region::inRandomOrder()->value('id'),
+            'adresse' => $this->faker->address(),
             'ville_id' => Ville::inRandomOrder()->value('id'),
-            'document' => $this->faker->mimeType()
+            'phone' => $this->faker->e164PhoneNumber(),
+            'zip' => 81000,
+            'email' => $this->faker->email()
         ];
     }
 }

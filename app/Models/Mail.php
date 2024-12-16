@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Destination;
 use App\Models\Expediteur;
 
-class Courrire extends Model
+class Mail extends Model
 {
     use HasFactory;
 

@@ -2,15 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
-use App\Models\Courrire;
-use Illuminate\Support\Facades\Storage;
-use App\Models\Destination;
-use App\Models\Expediteur;
-use App\Models\TempFile;
+use App\Models\Mail;
 use Illuminate\Http\Request;
 
-class CourrireController extends Controller
+class MailController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,20 +13,20 @@ class CourrireController extends Controller
     public function index()
     {
         //
-        $courrires = Courrire::orderBy('created_at', 'desc')->get();
-        return view("courrire.index", ["courrire" => $courrires]);
+        $mails = Mail::orderBy('created_at', 'desc')->get();
+        return view("mails.index", ["mails" => $mails]);
     }
 
-    public function sortantCourrire()
+    public function sortantMail()
     {
-        $courrires = Courrire::where("type", "SORTANT")->with('emetteur')->orderBy('created_at', 'desc')->get();
-        return view("courrire.index", ["courrire" => $courrires]);
+        $mails = Mail::where("type", "SORTANT")->with('emetteur')->orderBy('created_at', 'desc')->get();
+        return view("mails.index", ["mails" => $mails]);
     }
 
-    public function entantCourrire()
+    public function entantMail()
     {
-        $courrires = Courrire::where("type", "ENTRANT")->with('emetteur')->orderBy('created_at', 'desc')->get();
-        return view("courrire.index", ["courrire" => $courrires]);
+        $mails = Mail::where("type", "ENTRANT")->with('emetteur')->orderBy('created_at', 'desc')->get();
+        return view("mails.index", ["mails" => $mails]);
     }
 
     /**
@@ -42,8 +37,7 @@ class CourrireController extends Controller
         //
         $des = Destination::all();
         $exp = Expediteur::all();
-        return view("courrire.store", ["destination" => $des, "expediteur" => $exp]);
-        // return view("courrire.store", ["emetteurs" => $emetteurs]);
+        return view("mails.store", ["destination" => $des, "expediteur" => $exp]);
     }
 
     /**
@@ -55,7 +49,6 @@ class CourrireController extends Controller
         $req->validate([
             "object" => "required",
             "type" => 'required',
-            "emetteur" => "required",
             "division" => "required",
             "reception_jour" => "required",
         ]);
@@ -66,7 +59,7 @@ class CourrireController extends Controller
             Storage::disk('public')->put($doc->filename, file_get_contents($sourcePath));
 
             // dd($doc->filename, $req->reception_time);
-            Courrire::create([
+            Mail::create([
                 "object" => $req->object,
                 "emetteur_id" => $req->emetteur,
                 "division" => $req->division,
@@ -78,14 +71,14 @@ class CourrireController extends Controller
 
 
             $notification = array(
-                'message' => 'Courrire Created successfully',
+                'message' => 'Mail Created successfully',
                 'alert-type' => 'success',
             );
             // return redirect()->back()->with($notification);
             return redirect('/courrire')->with($notification);
         }
 
-        $courrire = Courrire::create([
+        $courrire = Mail::create([
             "object" => $req->object,
             "emetteur_id" => $req->emetteur,
             "division" => $req->division,
@@ -95,7 +88,7 @@ class CourrireController extends Controller
         ]);
 
         $notification = array(
-            'message' => 'Courrire Created successfully',
+            'message' => 'Mail Created successfully',
             'alert-type' => 'success'
         );
         return redirect('/courrire')->with($notification);
@@ -104,10 +97,10 @@ class CourrireController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Courrire $courrire)
+    public function show(Mail $courrire)
     {
         //
-        // $courrires = Courrire::with('emetteur')->where('id', $courrire->id)->get();
+        // $courrires = Mail::with('emetteur')->where('id', $courrire->id)->get();
         $courrire->load('emetteur');
         return view('courrire.show', ["courrire" => $courrire]);
 
@@ -116,7 +109,7 @@ class CourrireController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Courrire $courrire)
+    public function edit(Mail $courrire)
     {
         //
         $emetteurs = Emetteur::all();
@@ -126,7 +119,7 @@ class CourrireController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $req, Courrire $courrire)
+    public function update(Request $req, Mail $courrire)
     {
         //
         $req->validate([
@@ -155,7 +148,7 @@ class CourrireController extends Controller
         $courrire->save();
 
         $notification = array(
-            'message' => 'Courrire Updated successfully',
+            'message' => 'Mail Updated successfully',
             'alert-type' => 'success'
         );
         return redirect('/courrire')->with($notification);
@@ -165,12 +158,12 @@ class CourrireController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Courrire $courrire)
+    public function destroy(Mail $courrire)
     {
         //
-        Courrire::where('id', $courrire->id)->delete();
+        Mail::where('id', $courrire->id)->delete();
         $notification = array(
-            'message' => 'Courrire Deleted successfully',
+            'message' => 'Mail Deleted successfully',
             'alert-type' => 'success'
         );
         return response()->json($notification);
@@ -183,10 +176,10 @@ class CourrireController extends Controller
             "ids" => "required|array",
         ]);
 
-        Courrire::whereIn('id', $req->ids)->delete();
+        Mail::whereIn('id', $req->ids)->delete();
 
         $notification = array(
-            'message' => 'Many Courrire Deleted Successfully',
+            'message' => 'Many Mail Deleted Successfully',
             'alert-type' => 'success'
         );
         return response()->json($notification);
@@ -197,9 +190,9 @@ class CourrireController extends Controller
         $currentMonths = Carbon::now()->month;
         $lastMonths = Carbon::now()->subMonth()->month;
 
-        $mailSendCurrentMonths = Courrire::whereMonth("reception_jour", $currentMonths)->count();
-        $mailSendLastMonths = Courrire::whereMonth("reception_jour", $lastMonths)->count();
-        $allMails = Courrire::all()->count();
+        $mailSendCurrentMonths = Mail::whereMonth("reception_jour", $currentMonths)->count();
+        $mailSendLastMonths = Mail::whereMonth("reception_jour", $lastMonths)->count();
+        $allMails = Mail::all()->count();
 
         $totalPersentage = 0;
         if($mailSendLastMonths > 0){
@@ -214,9 +207,9 @@ class CourrireController extends Controller
         $currentMonths = Carbon::now()->month;
         $lastMonths = Carbon::now()->subMonth()->month;
 
-        $mailSendCurrentMonths = Courrire::whereMonth("reception_jour", $currentMonths)->where("type", "SORTANT")->count();
-        $mailSendLastMonths = Courrire::whereMonth("reception_jour", $lastMonths)->where("type", "SORTANT")->count();
-        $sortnatMails = Courrire::where("type", "SORTANT")->count();
+        $mailSendCurrentMonths = Mail::whereMonth("reception_jour", $currentMonths)->where("type", "SORTANT")->count();
+        $mailSendLastMonths = Mail::whereMonth("reception_jour", $lastMonths)->where("type", "SORTANT")->count();
+        $sortnatMails = Mail::where("type", "SORTANT")->count();
 
         $sortantPersentage = 0;
         if($mailSendLastMonths > 0){
@@ -231,9 +224,9 @@ class CourrireController extends Controller
         $currentMonths = Carbon::now()->month;
         $lastMonths = Carbon::now()->subMonth()->month;
 
-        $mailSendCurrentMonths = Courrire::whereMonth("reception_jour", $currentMonths)->where("type", "ENTRANT")->count();
-        $mailSendLastMonths = Courrire::whereMonth("reception_jour", $lastMonths)->where("type", "ENTRANT")->count();
-        $entrantMails = Courrire::where("type", "ENTRANT")->count();
+        $mailSendCurrentMonths = Mail::whereMonth("reception_jour", $currentMonths)->where("type", "ENTRANT")->count();
+        $mailSendLastMonths = Mail::whereMonth("reception_jour", $lastMonths)->where("type", "ENTRANT")->count();
+        $entrantMails = Mail::where("type", "ENTRANT")->count();
 
         $entrantPersentage = 0;
         if($mailSendLastMonths > 0){

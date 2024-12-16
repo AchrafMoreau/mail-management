@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('courrires', function (Blueprint $table) {
+        Schema::create('mails', function (Blueprint $table) {
             $table->id();
             $table->enum('type', ['SORTANT', 'ENTRANT']);
             $table->date('reception_jour');
@@ -22,7 +22,7 @@ return new class extends Migration
             $table->unsignedBigInteger('destination_id')->nullable();
             $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade')->onUpdate('cascade');
             $table->text('observation')->nullable();
-            $table->enum('division', ['Administration', 'Ressource Humains', 'Gestion'])->nullable();
+            // $table->enum('division', ['Administration', 'Ressource Humains', 'Gestion'])->nullable();
             $table->string('document')->nullable();
             $table->timestamps();
         });
@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('courrires');
+        Schema::dropIfExists('mails');
     }
 };

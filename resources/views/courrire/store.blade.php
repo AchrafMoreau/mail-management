@@ -68,51 +68,62 @@
                         <!--end col-->
                       
                         <!--end col-->
-                        <div class="col-md-12">
-                            <div class="mb-4">
-                                <label for="VertimeassageInput" class="form-label">@lang('translation.observation')</label>
-                                <textarea class="form-control" id="VertimeassageInput" name="observation" rows="4" placeholder="Enter your message"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
+                      
+                        <div class="col-md-6 mt-4">
                             <div class="row d-flex align-items-center mb-4">
-                                <div class="col-md-8">
-                                    <label for="choices-single-default" class="form-label ">@lang('translation.emetteur')</label>
-                                    <select class="form-control @error('emetteur') is-invalid @enderror" data-choices name="emetteur"
-                                        id="selectEmetteur">
-                                        <option value="">@lang("translation.choose")</option>
-                                        @foreach($emetteurs as $emt)
+                                <div class="col-md-12">
+                                    <label for="choices-single-default" class="form-label ">@lang('translation.expediteur')</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <select class="form-control @error('expediteur') is-invalid @enderror" data-choices name="expediteur"
+                                        id="selectExpediteur" >
+                                        <option value="">@lang("translation.chooseExp")</option>
+                                        @foreach($expediteur as $emt)
                                             <option value="{{ $emt->id }}">{{ $emt->nom }}</option>
                                         @endforeach
                                     </select>
-                                    @error('emetteur')
+                                    @error('expediteur')
                                         <span class='invalid-feedback' role='alert'>
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
-                                <div class="col-md-4">
-                                    <button class="btn m-md-3 p-2 btn-sm btn-primary edit-item-btn" type='button'
-                                        data-bs-toggle="modal" data-bs-target="#showModal">@lang("translation.add-emetteur")</button>
+                                <div class="col-md-5">
+                                    <button class="btn  p-2 btn-sm btn-primary edit-item-btn" type='button' id="addExpediteur"
+                                        data-bs-toggle="modal"  data-bs-target="#showModal">@lang("translation.add-expediteur")</button>
                                 </div>
                             </div>
                         </div>
                         <!--end col-->
-                        <div class="col-md-6">
+                        <div class="col-md-6 mt-4">
+                            <div class="row d-flex align-items-center mb-4">
+                                <div class="col-md-12">
+                                    <label for="choices-single-default" class="form-label ">@lang('translation.destinations')</label>
+                                </div>
+                                <div class="col-md-7">
+                                    <select class="form-control @error('destination') is-invalid @enderror" data-choices name="destination"
+                                        id="selectDistination">
+                                        <option value="">@lang("translation.chooseDes")</option>
+                                        @foreach($destination as $emt)
+                                            <option value="{{ $emt->id }}">{{ $emt->nom }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('destination')
+                                        <span class='invalid-feedback' role='alert'>
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-5">
+                                    <button class="btn p-2 btn-sm btn-success edit-item-btn" type='button' id="addDestination"
+                                        data-bs-toggle="modal" data-bs-target="#showModal">@lang("translation.add-destination")</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
                             <div class="mb-4">
-                                <label for="choices-single-no-search" class="form-label ">
-                                    @lang('translation.division')
-                                </label>
-                                <select class="form-control" id="choices-single-no-search" name="division" data-choices data-choices-search-false  data-choices-removeItema>
-                                    <option value="Administration">@lang('translation.administration')</option>
-                                    <option value="Ressource Humains">@lang('translation.rh')</option>
-                                    <option value="Gestion">@lang('translation.gestion')</option>
-                                </select>
-                                @error('emetteur')
-                                    <span class='invalid-feedback' role='alert'>
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                                <label for="VertimeassageInput" class="form-label">@lang('translation.observation')</label>
+                                <textarea class="form-control" id="VertimeassageInput" name="observation" rows="4" placeholder="Enter your message"></textarea>
                             </div>
                         </div>
                         <!--end col-->
@@ -280,6 +291,33 @@
             }
         })
 
+        $(document).ready(()=>{
+            $("button#addDestination").prop("disabled", true);
+            $("button#addDestination").removeClass("btn-success").addClass("btn-muted");
+            desVal.disable()
+        })
+        const exp = document.getElementById("selectExpediteur");
+        const expVal = new Choices(exp);
+        const des = document.getElementById("selectDistination");
+        const desVal = new Choices(des);
+        const statusOfType = $("#choices-single-no-search");
+        statusOfType.on('change', function(e){
+            if(e.target.value == "SORTANT"){
+                desVal.enable();
+                $("button#addDestination").prop("disabled", false);
+                $("button#addDestination").removeClass("btn-muted").addClass("btn-success");
+                expVal.disable();
+                $("button#addExpediteur").prop("disabled" , true);
+                $("button#addExpediteur").removeClass("btn-primary").addClass("btn-muted");
+            }else{
+                $("button#addDestination").prop("disabled", true);
+                $("button#addDestination").removeClass("btn-success").addClass("btn-muted");
+                desVal.disable()
+                $("button#addExpediteur").prop("disabled" , false);
+                expVal.enable();
+                $("button#addExpediteur").removeClass("btn-muted").addClass("btn-primary");
+            }
+        })
     </script>
     <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>

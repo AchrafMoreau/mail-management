@@ -15,13 +15,12 @@ class Setting extends Model
 
     protected $fillable = [
         'user_id', 
-        "theme", 
-        "data_layout_position", 
-        "data_topbar", 
-        "data_layout_style",
-        "data_sidebar", 
         'region_id', 
-        "name" 
+        "name",
+        "data_bs_theme",
+        "data_layout_position",
+        "data_topbar",
+        "data_sidebar",
     ];
 
     public function user(){

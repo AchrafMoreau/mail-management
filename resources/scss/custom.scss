@@ -6,15 +6,6 @@ Contact: support@themesbrand.com
 File: Custom Css File
 */
 
-#navbar-nav .menu-title .name{
-    font-size: 16px;
-}
-#navbar-nav .menu-title .bar{
-    width: 80%;
-    height: 1px;
-    margin: auto;
-    background:radial-gradient(#2458da, #0a2b3d);
-}
 
 :is([data-layout=vertical],[data-layout=semibox])[data-sidebar=dark] .logo-light{
     width: 100%;
@@ -66,3 +57,25 @@ File: Custom Css File
     padding: 0;
 }
 
+
+#navbar-nav .menu-title .name{
+    font-size: 16px;
+}
+#navbar-nav .menu-title .bar{
+    width: 80%;
+    height: 1px;
+    margin: auto;
+    background:radial-gradient(#2458da, var(--vz-vertical-menu-bg));
+}
+
+.choices__list--dropdown {
+  height: 0;
+}
+
+.choices__list--dropdown.is-active {
+  height: auto;
+}
+
+.choices__list--dropdown .choices__list{
+    max-height: 200px;
+}

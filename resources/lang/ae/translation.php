@@ -1,7 +1,8 @@
 <?php
 return [
+    "id" => "رقم تعريفي",
     "welcomeBack" => "مرحبًا بعودتك",
-    "SignintocontinuetoABH" => "قم بتسجيل الدخول للمتابعة إلى وكالة الحوض الهيدروليكي",
+    "SignintocontinuetoABH" => "قم بتسجيل الدخول للمتابعة إلي الأرصاد الجوية الوطني",
     "Username" => "اسم المستخدم",
     "password" => "كلمة المرور",
     "fillAllField" => "يرجى ملء جميع الحقول",
@@ -80,10 +81,12 @@ return [
     "date" => "التاريخ",
     "time" => "الوقت",
     "submit" => "إرسال",
-    "courrire" => "الرسالة",
-    "decharge" => "الإيصال",
-    "emetteur" => "المرسل",
 
+
+    "courrire" => "البريد",
+    "mail" => "الرسائل",
+    "destinations" => "الوجهات",
+    "expediteur" => "المرسلون",
     // ------------ from here
     "menu" => "قائمة الطعام",
     "dashboards" => "لوحات القيادة",

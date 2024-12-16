@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\DB;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Emetteur;
+use App\Models\Destination;
+use App\Models\Expediteur;
 use App\Models\Setting;
+use App\Models\Mail;
 use App\Models\Courrire;
-use App\Models\Decharge;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -45,10 +45,9 @@ class DatabaseSeeder extends Seeder
 
             Setting::create([
                 'user_id' => $user->id,
-                "theme" => "light",
+                "data_bs_theme" => "light",
                 "data_layout_position" => "fixed",
                 "data_topbar" => "light",
-                "data_layout_style" => "default",
                 "data_sidebar" => "dark",
                 'region_id' => 9,
                 "name" => "Maroc Meteo Du Agadir Souse Massa Region"
@@ -56,9 +55,10 @@ class DatabaseSeeder extends Seeder
 
         }
 
-        Emetteur::factory(10)->create();
+        Expediteur::factory(10)->create();
+        Destination::factory(10)->create();
         Courrire::factory(100)->create();
-        Decharge::factory(10)->create();
+        Mail::factory(10)->create();
         
         $this->command->info('Seeder imported successfully!');
         

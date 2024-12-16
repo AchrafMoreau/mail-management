@@ -62,13 +62,16 @@ class SettingController extends Controller
         $setting = Setting::where("user_id", $id)->first();
 
         // dd($request);
-        $setting->name = $request->name;
-        $setting->region_id = $request->region;
-        $request->input("data-bs-theme") && $setting->theme = $request->input("data-bs-theme");
-        $request->input("data-layout-style") && $setting->data_layout_style = $request->input("data-layout-style");
-        $request->input("data-sidebar") && $setting->data_sidebar = $request->input("data-sidebar");
-        $request->input("data-layout-position") && $setting->data_layout_position = $request->input("data-layout-position");
-        $request->input("data-topbar") && $setting->data_topbar = $request->input("data-topbar");
+        // dd($request->input("data-sidebar"));
+        if($request->theme){
+            $setting->data_bs_theme = $request->input("data-bs-theme");
+            $setting->data_layout_position = $request->input("data-layout-position");
+            $setting->data_topbar = $request->input("data-topbar");
+            $setting->data_sidebar = $request->input("data-sidebar");
+        }else{
+            $setting->name = $request->name;
+            $setting->region_id = $request->region;
+        }
         $setting->save();
 
         $notification = array(

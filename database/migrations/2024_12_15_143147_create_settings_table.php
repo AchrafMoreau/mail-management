@@ -15,10 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
-            $table->enum("theme", ["dark", "light"]);
+            $table->enum("data_bs_theme", ["light", "dark"]);
             $table->enum("data_layout_position", ["fixed", "scrollable"]);
-            $table->enum("data_topbar", ["dark", "light"]);
-            $table->enum("data_layout_style", ["default", "detached"]);
+            $table->enum("data_topbar" , ["light", "dark"]);
             $table->enum("data_sidebar", ["dark", "light", "gradient"]);
             $table->unsignedBigInteger('region_id');
             $table->foreign('region_id')->references('id')->on('regions')->onDelete('cascade')->onUpdate('cascade');
