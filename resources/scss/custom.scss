@@ -6,17 +6,33 @@ Contact: support@themesbrand.com
 File: Custom Css File
 */
 
+#navbar-nav .menu-title .name{
+    font-size: 16px;
+}
+#navbar-nav .menu-title .bar{
+    width: 80%;
+    height: 1px;
+    margin: auto;
+    background:radial-gradient(#2458da, #0a2b3d);
+}
 
+:is([data-layout=vertical],[data-layout=semibox])[data-sidebar=dark] .logo-light{
+    width: 100%;
+}
+
+.logo-lg img{
+    object-fit: cover;
+    width: 100%;
+}
 
 .auth-one-bg{
-    background: url("/build/images/auth-one-bg.jpg"), linear-gradient(145deg, rgba(0, 128, 0, 0.322), #00bd9d);
-    background-size: contain;
+    background: url("/build/images/logo-lg.png");
     background-position: center;
+    background-size: contain;
     background-repeat: no-repeat;
 }
 
 .choices__list--dropdown{
-    /* max-height: 300px !important; */
     z-index: 9999;
 }
 .choices[data-type*=select-one] .choices__inner.is-invalid{
@@ -46,3 +62,7 @@ File: Custom Css File
     /* margin-left :1em; */
     color:white;
 }
+.navbar-brand-box{
+    padding: 0;
+}
+

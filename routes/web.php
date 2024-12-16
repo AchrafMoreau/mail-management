@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CourrireController;
 use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\DechargeController;
 use App\Http\Controllers\TempFileController;
 use App\Http\Controllers\EmetteurController;
@@ -47,6 +48,9 @@ Route::middleware(['auth', 'clearNotification'])->group(function () {
     Route::get('/entrant-mail-persentage', [CourrireController::class, 'getEntrantMailPersentage']);
     Route::get('/sortant-mail-persentage', [CourrireController::class, 'getSortantMailPersentage']);
     Route::get('/total-decharge-persentage', [DechargeController::class, 'getTotalDechargePersentage']);
+
+
+    Route::resource('/setting', SettingController::class);
 });
 
 require __DIR__.'/auth.php';

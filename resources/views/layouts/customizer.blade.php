@@ -20,8 +20,7 @@
     </div>
 </div> --}}
 
-{{-- <!-- Theme Settings -->
-<div class="offcanvas offcanvas-end border-0" tabindex="-1" id="theme-settings-offcanvas">
+{{-- <div class="offcanvas offcanvas-end border-0" tabindex="-1" id="theme-settings-offcanvas">
     <div class="d-flex align-items-center bg-primary bg-gradient p-3 offcanvas-header">
         <h5 class="m-0 me-2 text-white">Theme Customizer</h5>
 

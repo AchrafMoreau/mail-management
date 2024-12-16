@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use app\Models\Decharge;
+use App\Models\Decharge;
+use App\Models\Setting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -20,5 +21,9 @@ class Region extends Model
 
     public function decharges(){
         return $this->hasMany(Decharge::class);
+    }
+
+    public function settings(){
+        return $this->hasMany(Setting::class);
     }
 }

@@ -8,7 +8,7 @@
                 <img src="{{ URL::asset('build/images/logo-sm.png') }}" alt="" height="45">
             </span>
             <span class="logo-lg" >
-                <img src="{{ URL::asset('build/images/logo-dark.png') }}" alt="" height="120" style="margin-block:20px">
+                <img src="{{ URL::asset('build/images/logo-lg-nav.png') }}" alt="" >
             </span>
         </a>
         <!-- Light Logo-->
@@ -17,7 +17,7 @@
                 <img src="{{ URL::asset('build/images/logo-sm.png') }}" alt="" height="45">
             </span>
             <span class="logo-lg">
-                <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="120" style="margin-block:20px">
+                <img src="{{ URL::asset('build/images/logo-lg-nav.png') }}" alt="" >
             </span>
         </a>
         <button type="button" class="btn btn-sm p-0 fs-20 header-item float-end btn-vertical-sm-hover" id="vertical-hover">
@@ -28,10 +28,16 @@
     <div id="scrollbar">
         <div class="container-fluid">
 
+
             <div id="two-column-menu">
             </div>
             <ul class="navbar-nav" id="navbar-nav">
+                <li class="menu-title">
+                    <span class="name">{{ Auth::user()->setting->name }}</span>
+                    <div class="bar"></div>
+                </li>
                 <li class="menu-title"><span>@lang('translation.menu')</span></li>
+
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ url('/dashboard') }}"  role="button" >
                         <i data-feather="home" class="icon-dual"></i> <span>@lang('translation.dashboards')</span>
