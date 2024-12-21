@@ -22,7 +22,6 @@ class ExpediteurFactory extends Factory
             'adresse' => $this->faker->address(),
             'ville_id' => Ville::inRandomOrder()->value('id'),
             'phone' => $this->faker->e164PhoneNumber(),
-            'zip' => 81000,
             'email' => $this->faker->email()
         ];
     }

@@ -1,23 +1,22 @@
 @extends('layouts.master')
 @section('title')
-    @lang('translation.editCourrire')
+    @lang('translation.editMail')
 @endsection
 @section('css')
     <link rel="stylesheet" href="{{ URL::asset('build/libs/filepond/filepond.min.css') }}" type="text/css" />
     <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet"
         href="{{ URL::asset('build/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css') }}">
-    <!--  Toaster notification -->
 @endsection
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
-        <a href="{{ url("/courrire") }}">
-            @lang("translation.courrire")
+        <a href="{{ url("/mail") }}">
+            @lang("translation.mail")
         </a>
         @endslot
         @slot('title')
-            @lang("translation.editCourrire")
+            @lang("translation.editMail")
         @endslot
     @endcomponent
 
@@ -25,11 +24,10 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1 text-capitalize">@lang('translation.editCourrierMessage')</h4>
-                </div><!-- end card header -->
+                    <h4 class="card-title mb-0 flex-grow-1 text-capitalize">@lang('translation.editMailMessage')</h4>
+                </div>
                 <div class="card-body">
-                <form action="{{ url( '/courrire'.'/'.$courrire->id ) }}" method="POST" enctype="multipart/form-data">
-                {{-- <form method="POST" enctype="multipart/form-data"> --}}
+                <form action="{{ url( '/mail'.'/'.$mail->id ) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method("PUT")
                     <div class="row">
@@ -38,7 +36,7 @@
                                 <label for="firstNameinput" class="form-label">@lang("translation.object")</label>
                                 <input required type="text" 
                                     name="object"
-                                    value="{{ $courrire->object }}"
+                                    value="{{ $mail->object }}"
                                     class="form-control @error('object') is-invalid @enderror"  
                                     placeholder="@lang('translation.enter-object')"
                                     id="firstNameinput"
@@ -57,8 +55,8 @@
                                     @lang('translation.type')
                                 </label>
                                 <select class="form-control @error('type') is-invalid @enderror" id="choices-single-no-search" name="type" data-choices data-choices-search-false  data-choices-removeItema>
-                                    <option value="ENTRANT" {{ $courrire->type == "ENTRANT" ? 'selected' : "" }}>@lang('translation.entrant')</option>
-                                    <option value="SORTANT" {{ $courrire->type == "SORTANT" ? 'selected' : "" }}>@lang('translation.sortant')</option>
+                                    <option value="ENTRANT" {{ $mail->type == "ENTRANT" ? 'selected' : "" }}>@lang('translation.entrant')</option>
+                                    <option value="SORTANT" {{ $mail->type == "SORTANT" ? 'selected' : "" }}>@lang('translation.sortant')</option>
                                 </select>
                                 @error('type')
                                     <span class='invalid-feedback' role='alert'>
@@ -78,11 +76,10 @@
                                         id="selectExpediteur" >
                                         <option value="">@lang("translation.chooseExp")</option>
                                         @foreach($expediteur as $emt)
-                                            <option {{ $courrire->expediteur && $emt->id == $courrire->expediteur->id ? 'selected' : "" }} value="{{ $emt->id }}">{{ $emt->nom }}</option>
+                                            <option {{ $mail->expediteur && $emt->id == $mail->expediteur->id ? 'selected' : "" }} value="{{ $emt->id }}">{{ $emt->nom }}</option>
                                         @endforeach
                                     </select>
-                                    @error('expediteur')
-                                        <span class='invalid-feedback' role='alert'>
+                                    @error('expediteur') <span class='invalid-feedback' role='alert'>
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
@@ -93,7 +90,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!--end col-->
                         <div class="col-md-6 mt-4">
                             <div class="row d-flex align-items-center mb-4">
                                 <div class="col-md-12">
@@ -104,7 +100,7 @@
                                         id="selectDistination">
                                         <option value="">@lang("translation.chooseDes")</option>
                                         @foreach($destination as $emt)
-                                            <option {{ $courrire->destination && $emt->id == $courrire->destination->id ? 'selected' : "" }} value="{{ $emt->id }}">{{ $emt->nom }}</option>
+                                            <option {{ $mail->destination && $emt->id == $mail->destination->id ? 'selected' : "" }} value="{{ $emt->id }}">{{ $emt->nom }}</option>
                                         @endforeach
                                     </select>
                                     @error('destination')
@@ -122,7 +118,7 @@
                         <div class="col-md-12">
                             <div class="mb-4">
                                 <label for="VertimeassageInput" class="form-label">@lang('translation.observation')</label>
-                                <textarea class="form-control" id="VertimeassageInput" name="observation" rows="4" placeholder="Enter your message">{{ $courrire->observation }}</textarea>
+                                <textarea class="form-control" id="VertimeassageInput" name="observation" rows="4" placeholder="Enter your message">{{ $mail->observation }}</textarea>
                             </div>
                         </div>
                         <!--end col-->
@@ -138,22 +134,20 @@
                                         <div class="col-md-6">
                                             <div class="mb-4">
                                                 <label for="dateInput" class="form-label">@lang('translation.date')</label>
-                                                <input value="{{ $courrire->reception_jour }}" required type="date" class="form-control" name="reception_jour" data-provider="flatpickr" id="dateInput">
+                                                <input value="{{ $mail->reception_jour }}" required type="date" class="form-control" name="reception_jour" data-provider="flatpickr" id="dateInput">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-4">
                                                 <label for="dateInput" class="form-label">@lang('translation.time')</label>
                                                 <input type="time" class="form-control" data-provider="timepickr"
-                                                    data-time-basic="true" value="{{ $courrire->reception_heure }}" name="reception_time" id="timeInput">
+                                                    data-time-basic="true" value="{{ $mail->reception_heure }}" name="reception_time" id="timeInput">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!--end col-->
-                        <!--end col-->
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
@@ -165,7 +159,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!--end col-->
                         <div class="col-lg-12">
                             <div class="text-end">
                                 <button type="submit" class="btn btn-primary">Submit</button>

@@ -4,6 +4,7 @@
 @endsection
 @section('css')
     <link rel="stylesheet" href="{{ URL::asset('build/libs/filepond/filepond.min.css') }}" type="text/css" />
+    <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
     <link rel="stylesheet"
         href="{{ URL::asset('build/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.css') }}">
     <!--  Toaster notification -->
@@ -27,8 +28,7 @@
                     <h4 class="card-title mb-0 flex-grow-1 text-capitalize">@lang('translation.addCourrierMessage')</h4>
                 </div><!-- end card header -->
                 <div class="card-body">
-                <form action="{{ url('/courrire') }}" method="POST" enctype="multipart/form-data">
-                {{-- <form method="POST" enctype="multipart/form-data"> --}}
+                <form id="addCourrireFrom" action="{{ url('/courrire') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method("POST")
                     <div class="row">
@@ -88,7 +88,7 @@
                                         </span>
                                     @enderror
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-5 mt-3 mt-md-0 mt-lg-0 mt-xl-0 mt-xxl-0">
                                     <button class="btn  p-2 btn-sm btn-primary edit-item-btn" type='button' id="addExpediteur"
                                         data-bs-toggle="modal"  data-bs-target="#showModal">@lang("translation.add-expediteur")</button>
                                 </div>
@@ -114,7 +114,7 @@
                                         </span>
                                     @enderror
                                 </div>
-                                <div class="col-md-5">
+                                <div class="col-md-5 mt-3 mt-md-0 mt-lg-0 mt-xl-0 mt-xxl-0">
                                     <button class="btn p-2 btn-sm btn-success edit-item-btn" type='button' id="addDestination"
                                         data-bs-toggle="modal" data-bs-target="#showModal">@lang("translation.add-destination")</button>
                                 </div>
@@ -188,40 +188,48 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                         id="close-modal"></button>
                 </div>
-                <form class="tablelist-form" id='addEmtteur' method="POST">
+                <form class="tablelist-form" id='addForm' method="POST">
                     @csrf
                     @method("POST")
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="customername-field" class="form-label">@lang("translation.nom")</label>
-                            <input type="text" id="customername-field" name="nom" class="form-control" placeholder="@lang('translation.enter-nom')"
+                            <label for="name-field" class="form-label">@lang("translation.nom")</label>
+                            <input type="text" id="name-field" name="nom" class="form-control" placeholder="@lang('translation.enter-nom')"
                                 required />
+                        </div>
+                        <div class="mb-3">
+                            <label for="ville-field" class="form-label">@lang("translation.ville")</label>
+                            <select class="form-control" data-choices name="ville" id="ville-field" >
+                                <option value="">@lang('translation.select-ville')</option>
+                                @foreach($villes  as $ville)
+                                    <option value="{{ $ville->id }}" >{{ $ville->ville }}</option>
+                                @endforeach
+                            </select>
+                            <span class="invalid-feedback" role="alert">
+                            </span>
                         </div>
 
                         <div class="col-12 mb-3">
                             <label for="inputAddress" class="form-label">@lang("translation.adresse")</label>
-                            <input type="text" required name='adresse' class="form-control" id="inputAddress" placeholder="1234 Main St">
+                            <input type="text" name='adresse' class="form-control" id="address-field" placeholder="1234 Main St">
                         </div>
-                        <div class="col-12 mb-3">
-                            <label for="phonenumberInput" class="form-label">@lang('translation.phone')</label>
-                            <input type="tel" name="phone" class="form-control" placeholder="+(245) 451 45123"
-                                id="phonenumberInput">
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-md-8">
-                                <label for="inputCity" class="form-label">@lang('translation.city')</label>
-                                <input type="text" name="city" class="form-control" id="inputCity" placeholder="Enter your city">
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label for="phonenumberInput" class="form-label">@lang('translation.email')</label>
+                                <input type="tel" name="email" class="form-control" placeholder="+(245) 451 45123"
+                                    id="email-field">
                             </div>
-                            <div class="col-md-4">
-                                <label for="inputZip" class="form-label">@lang('translation.zipCode')</label>
-                                <input type="text" name="zip" class="form-control" id="inputZip" placeholder="Zin code">
+                            <div class="col-6 mb-3">
+                                <label for="phonenumberInput" class="form-label">@lang('translation.phone')</label>
+                                <input type="tel" name="phone" class="form-control" placeholder="+(245) 451 45123"
+                                    id="telephone-field">
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <div class="hstack gap-2 justify-content-end">
                             <button type="button" class="btn btn-light" data-bs-dismiss="modal">@lang('translation.close')</button>
-                            <button type="submit" class="btn btn-success" id="addEmtteur">@lang('translation.submit')</button>
+                            <button type="submit" class="btn btn-success" id="submitButton">@lang('translation.submit')</button>
                             <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
                         </div>
                     </div>
@@ -234,90 +242,11 @@
     <script>
         window.translations = {
             dragAndDrop: "{{ __('translation.dragAndDrop') }}",
+            addExp: "{{ __('translation.add-expediteur') }}",
+            addDes: "{{ __('translation.add-destination') }}",
+            selectVille: "{{ __('translation.pleaseSelectVille')}}"
         }
-        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        $('#addEmtteur').on('submit', function(e){
-            e.preventDefault()
-            console.log(e.target)
-            const form = e.target;
-            const data = {
-                nom : form.elements['nom'].value,
-                city : form.elements['city'].value,
-                phone : form.elements['phone'].value,
-                adresse : form.elements['adresse'].value,
-                zip : form.elements['zip'].value,
-            }
-            $.ajax({
-                url: "/emetteur",
-                type: "POST",
-                data,
-                headers:{
-                    'X-CSRF-TOKEN' : token,
-                },
-                beforeSend: ()=>{
-                    $('button#addEmtteur').html(`
-                        <div style='width:1rem; height:1rem;' class="spinner-border text-white" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    `);
-                },
-                complete: ()=>{
-                    $('button#addEmtteur').html("@lang('translation.submit')");
-
-                },
-                success: (res) => {
-                    toastr.success(res.message)
-                    console.log(clientSelect)
-                    let elements = clientSelect.config.choices
-                    elements.push({value: res.data.id , label: res.data.nom, selected: true, disabled: false, placeholder: false})
-                    clientSelect.clearStore(); 
-                    clientSelect.setChoices(elements, 'value', 'label', false);
-                    clearFileds()
-                    $('#close-modal').click()
-                },
-                error: (e) =>{
-                    const errorMessage = e.responseJSON.message
-                    toastr.error('Something Wrong :( ', errorMessage);
-
-                }
-            })
-            function clearFileds(){
-                form.elements['nom'].value = ""
-                form.elements['city'].value = ""
-                form.elements['adresse'].value = ""
-                form.elements['zip'].value = ""
-                form.elements['phone'].value = ""
-            }
-        })
-
-        $(document).ready(()=>{
-            $("button#addDestination").prop("disabled", true);
-            $("button#addDestination").removeClass("btn-success").addClass("btn-muted");
-            desVal.disable()
-        })
-        const exp = document.getElementById("selectExpediteur");
-        const expVal = new Choices(exp);
-        const des = document.getElementById("selectDistination");
-        const desVal = new Choices(des);
-        const statusOfType = $("#choices-single-no-search");
-        statusOfType.on('change', function(e){
-            if(e.target.value == "SORTANT"){
-                desVal.enable();
-                $("button#addDestination").prop("disabled", false);
-                $("button#addDestination").removeClass("btn-muted").addClass("btn-success");
-                expVal.disable();
-                $("button#addExpediteur").prop("disabled" , true);
-                $("button#addExpediteur").removeClass("btn-primary").addClass("btn-muted");
-            }else{
-                $("button#addDestination").prop("disabled", true);
-                $("button#addDestination").removeClass("btn-success").addClass("btn-muted");
-                desVal.disable()
-                $("button#addExpediteur").prop("disabled" , false);
-                expVal.enable();
-                $("button#addExpediteur").removeClass("btn-muted").addClass("btn-primary");
-            }
-        })
     </script>
     <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
@@ -334,6 +263,8 @@
     <script src="{{ URL::asset('build/libs/filepond-plugin-file-encode/filepond-plugin-file-encode.min.js') }}"></script>
     <script src="{{ URL::asset('build/js/pages/form-file-upload.init.js') }}"></script>
 
+    <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ URL::asset('build/js/pages/courrire-store.js') }}"></script>
    
 
 @endsection

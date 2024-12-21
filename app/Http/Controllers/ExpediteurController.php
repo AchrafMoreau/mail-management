@@ -26,9 +26,31 @@ class ExpediteurController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $req)
     {
         //
+        // dd($request);
+        
+        $req->validate([
+            "nom" => "required",
+            "ville" => "required"
+        ]);
+
+        $em = Expediteur::create([
+            "nom" => $req->nom,
+            "adresse" => $req->adresse,
+            "phone" => $req->phone,
+            "ville_id" => $req->ville,
+            "email" => $req->email
+        ]);
+
+
+        $notification = array(
+            'message' => 'Expediteur Created successfully',
+            'alert-type' => 'success',
+            "data" => $em->load('ville')
+        );
+        return response()->json($notification);
     }
 
     /**

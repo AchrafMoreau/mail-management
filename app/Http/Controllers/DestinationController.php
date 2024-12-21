@@ -26,9 +26,29 @@ class DestinationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $req)
     {
         //
+        $req->validate([
+            "nom" => "required",
+            "ville" => "required"
+        ]);
+
+        $em = Destination::create([
+            "nom" => $req->nom,
+            "adresse" => $req->adresse,
+            "phone" => $req->phone,
+            "ville_id" => $req->ville,
+            "email" => $req->email
+        ]);
+
+
+        $notification = array(
+            'message' => 'Destination Created successfully',
+            'alert-type' => 'success',
+            "data" => $em->load('ville')
+        );
+        return response()->json($notification);
     }
 
     /**

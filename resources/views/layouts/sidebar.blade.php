@@ -40,7 +40,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ url('/dashboard') }}"  role="button" >
-                        <i data-feather="home" class="icon-dual"></i> <span>@lang('translation.dashboards')</span>
+                        <i class="ri-line-chart-line"></i> <span>@lang('translation.statistic')</span>
                     </a>
                 </li> <!-- end Dashboard Menu -->
 
@@ -57,7 +57,7 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a class="nav-link menu-link" href="{{ url('destination') }}" role="button" >
                         <i class=" ri-inbox-archive-line"></i> <span>@lang('translation.destinations')</span>
                     </a>
@@ -66,7 +66,7 @@
                     <a class="nav-link menu-link" href="{{ url("expediteur") }}" role="button" >
                         <i class="ri-inbox-unarchive-line"></i> <span>@lang('translation.expediteur')</span>
                     </a>
-                </li> <!-- end Dashboard Menu -->
+                </li> <!-- end Dashboard Menu --> --}}
             </ul>
         </div>
         <!-- Sidebar -->

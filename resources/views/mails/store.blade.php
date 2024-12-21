@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    @lang('translation.editCourrire')
+    @lang('translation.addMail')
 @endsection
 @section('css')
     <link rel="stylesheet" href="{{ URL::asset('build/libs/filepond/filepond.min.css') }}" type="text/css" />
@@ -12,12 +12,12 @@
 @section('content')
     @component('components.breadcrumb')
         @slot('li_1')
-        <a href="{{ url("/courrire") }}">
-            @lang("translation.courrire")
+        <a href="{{ url("/mail") }}">
+            @lang("translation.mail")
         </a>
         @endslot
         @slot('title')
-            @lang("translation.editCourrire")
+            @lang("translation.addMail")
         @endslot
     @endcomponent
 
@@ -25,20 +25,18 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header align-items-center d-flex">
-                    <h4 class="card-title mb-0 flex-grow-1 text-capitalize">@lang('translation.editCourrierMessage')</h4>
+                    <h4 class="card-title mb-0 flex-grow-1 text-capitalize">@lang('translation.addMailMessage')</h4>
                 </div><!-- end card header -->
                 <div class="card-body">
-                <form action="{{ url( '/courrire'.'/'.$courrire->id ) }}" method="POST" enctype="multipart/form-data">
-                {{-- <form method="POST" enctype="multipart/form-data"> --}}
+                <form id="addCourrireFrom" action="{{ url('/mail') }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    @method("PUT")
+                    @method("POST")
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-4">
                                 <label for="firstNameinput" class="form-label">@lang("translation.object")</label>
                                 <input required type="text" 
                                     name="object"
-                                    value="{{ $courrire->object }}"
                                     class="form-control @error('object') is-invalid @enderror"  
                                     placeholder="@lang('translation.enter-object')"
                                     id="firstNameinput"
@@ -57,8 +55,8 @@
                                     @lang('translation.type')
                                 </label>
                                 <select class="form-control @error('type') is-invalid @enderror" id="choices-single-no-search" name="type" data-choices data-choices-search-false  data-choices-removeItema>
-                                    <option value="ENTRANT" {{ $courrire->type == "ENTRANT" ? 'selected' : "" }}>@lang('translation.entrant')</option>
-                                    <option value="SORTANT" {{ $courrire->type == "SORTANT" ? 'selected' : "" }}>@lang('translation.sortant')</option>
+                                    <option value="ENTRANT">@lang('translation.entrant')</option>
+                                    <option value="SORTANT">@lang('translation.sortant')</option>
                                 </select>
                                 @error('type')
                                     <span class='invalid-feedback' role='alert'>
@@ -68,6 +66,9 @@
                             </div>
                         </div>
                         <!--end col-->
+                      
+                        <!--end col-->
+                      
                         <div class="col-md-6 mt-4">
                             <div class="row d-flex align-items-center mb-4">
                                 <div class="col-md-12">
@@ -78,7 +79,7 @@
                                         id="selectExpediteur" >
                                         <option value="">@lang("translation.chooseExp")</option>
                                         @foreach($expediteur as $emt)
-                                            <option {{ $courrire->expediteur && $emt->id == $courrire->expediteur->id ? 'selected' : "" }} value="{{ $emt->id }}">{{ $emt->nom }}</option>
+                                            <option value="{{ $emt->id }}">{{ $emt->nom }}</option>
                                         @endforeach
                                     </select>
                                     @error('expediteur')
@@ -104,7 +105,7 @@
                                         id="selectDistination">
                                         <option value="">@lang("translation.chooseDes")</option>
                                         @foreach($destination as $emt)
-                                            <option {{ $courrire->destination && $emt->id == $courrire->destination->id ? 'selected' : "" }} value="{{ $emt->id }}">{{ $emt->nom }}</option>
+                                            <option value="{{ $emt->id }}">{{ $emt->nom }}</option>
                                         @endforeach
                                     </select>
                                     @error('destination')
@@ -122,7 +123,7 @@
                         <div class="col-md-12">
                             <div class="mb-4">
                                 <label for="VertimeassageInput" class="form-label">@lang('translation.observation')</label>
-                                <textarea class="form-control" id="VertimeassageInput" name="observation" rows="4" placeholder="Enter your message">{{ $courrire->observation }}</textarea>
+                                <textarea class="form-control" id="VertimeassageInput" name="observation" rows="4" placeholder="Enter your message"></textarea>
                             </div>
                         </div>
                         <!--end col-->
@@ -138,14 +139,14 @@
                                         <div class="col-md-6">
                                             <div class="mb-4">
                                                 <label for="dateInput" class="form-label">@lang('translation.date')</label>
-                                                <input value="{{ $courrire->reception_jour }}" required type="date" class="form-control" name="reception_jour" data-provider="flatpickr" id="dateInput">
+                                                <input required type="date" class="form-control" name="reception_jour" data-provider="flatpickr" id="dateInput">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="mb-4">
                                                 <label for="dateInput" class="form-label">@lang('translation.time')</label>
                                                 <input type="time" class="form-control" data-provider="timepickr"
-                                                    data-time-basic="true" value="{{ $courrire->reception_heure }}" name="reception_time" id="timeInput">
+                                                    data-time-basic="true" name="reception_time" id="timeInput">
                                             </div>
                                         </div>
                                     </div>
@@ -245,11 +246,11 @@
             addDes: "{{ __('translation.add-destination') }}",
             selectVille: "{{ __('translation.pleaseSelectVille')}}"
         }
+
     </script>
-   
     <script src="{{ URL::asset('build/libs/prismjs/prism.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
-        <script src="{{ URL::asset('build/libs/filepond/filepond.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/filepond/filepond.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/filepond-plugin-image-preview/filepond-plugin-image-preview.min.js') }}">
     </script>
     <script
@@ -261,66 +262,9 @@
 
     <script src="{{ URL::asset('build/libs/filepond-plugin-file-encode/filepond-plugin-file-encode.min.js') }}"></script>
     <script src="{{ URL::asset('build/js/pages/form-file-upload.init.js') }}"></script>
-    {{-- <script>
-        const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-        $('#addEmtteur').on('submit', function(e){
-            e.preventDefault()
-            console.log(e.target)
-            const form = e.target;
-            const data = {
-                nom : form.elements['nom'].value,
-                city : form.elements['city'].value,
-                phone : form.elements['phone'].value,
-                adresse : form.elements['adresse'].value,
-                zip : form.elements['zip'].value,
-            }
-            $.ajax({
-                url: "/emetteur",
-                type: "POST",
-                data,
-                headers:{
-                    'X-CSRF-TOKEN' : token,
-                },
-                beforeSend: ()=>{
-                    $('button#addEmtteur').html(`
-                        <div style='width:1rem; height:1rem;' class="spinner-border text-white" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    `);
-                },
-                complete: ()=>{
-                    $('button#addEmtteur').html("@lang('translation.submit')");
-
-                },
-                success: (res) => {
-                    toastr.success(res.message)
-                    console.log(clientSelect)
-                    let elements = clientSelect.config.choices
-                    elements.push({value: res.data.id , label: res.data.nom, selected: true, disabled: false, placeholder: false})
-                    clientSelect.clearStore(); 
-                    clientSelect.setChoices(elements, 'value', 'label', false);
-                    clearFileds()
-                    $('#close-modal').click()
-                },
-                error: (e) =>{
-                    const errorMessage = e.responseJSON.message
-                    toastr.error('Something Wrong :( ', errorMessage);
-
-                }
-            })
-            function clearFileds(){
-                form.elements['nom'].value = ""
-                form.elements['city'].value = ""
-                form.elements['adresse'].value = ""
-                form.elements['zip'].value = ""
-                form.elements['phone'].value = ""
-            }
-        })
-
-    </script> --}}
 
     <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ URL::asset('build/js/pages/courrire-store.js') }}"></script>
-    
+   
+
 @endsection

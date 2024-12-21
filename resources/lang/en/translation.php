@@ -1,5 +1,18 @@
 <?php
 return [
+    "region" => "State",
+    "statistic" => "Statistic",
+    "showMail" => "Show Mail",
+    "mail-list" => "Mail List",
+    "addMail" => "Add Mail",
+    "addMailMessage" => "Please fill out the form to add a new mail",
+    "ENTRANT" => "INCOMING",
+    "SORTANT" => "OUTGOING",
+    "year" => "Year",
+    "all" => "All",
+    "statistics" =>  "Statistics",
+    "pleaseSelectVille" => "Please Select a City",
+    "thosFieldRequired" => "Those Field Are Required",
     "id" => "Identifier",
     "reset" => "Reset",
     "themeSetting" => "Theme Settings",

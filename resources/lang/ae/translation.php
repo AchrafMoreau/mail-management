@@ -1,5 +1,18 @@
 <?php
 return [
+    "region" => "", // has to be fill
+    "statistic" => "الإحصائيات",
+    "showMail" => "عرض البريد",
+    "mail-list" => "قائمة البريد",
+    "addMail" => "إضافة بريد",
+    "addMailMessage" => "يرجى ملء النموذج لإضافة بريد جديد",
+    "ENTRANT" => "واردة",
+    "SORTANT" => "صادرة",
+    "year" => "سنة",
+    "all" => "الجميع",
+    "statistics" =>  "إحصائيات",
+    "pleaseSelectVille" => "الرجاء اختيار المدينة",
+    "thosFieldRequired" => "الحقول التالية مطلوبة",
     "id" => "رقم تعريفي",
     "welcomeBack" => "مرحبًا بعودتك",
     "SignintocontinuetoABH" => "قم بتسجيل الدخول للمتابعة إلي الأرصاد الجوية الوطني",

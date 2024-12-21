@@ -1,8 +1,11 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\DestinationController;
+use App\Http\Controllers\ExpediteurController;
 use App\Http\Controllers\CourrireController;
 use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\DechargeController;
 use App\Http\Controllers\TempFileController;
@@ -27,7 +30,16 @@ Route::middleware(['auth', 'clearNotification'])->group(function () {
     Route::get("/entrant-courrire", [CourrireController::class, "entantCourrire"]);
     Route::get("/sortant-courrire", [CourrireController::class, "sortantCourrire"]);
     Route::delete("/courrire-deleteMany", [CourrireController::class, "deleteMany"]);
+    Route::post("/courrie-filter", [CourrireController::class, "courrieFilter"]);
 
+
+    Route::resource("/mail", MailController::class);
+    Route::get("/entrant-mail", [MailController::class, "entantCourrire"]);
+    Route::get("/sortant-mail", [MailController::class, "sortantCourrire"]);
+    Route::delete("/mail-deleteMany", [MailController::class, "deleteMany"]);
+    Route::post("/mail-filter", [MailController::class, "courrieFilter"]);
+
+    
     Route::resource("/decharge", DechargeController::class);
     Route::delete("/decharge-deleteMany", [DechargeController::class, 'deleteMany']);
     Route::get("/dechargeJson", [DechargeController::class, 'json']);
@@ -51,6 +63,8 @@ Route::middleware(['auth', 'clearNotification'])->group(function () {
 
 
     Route::resource('/setting', SettingController::class);
+    Route::resource('/destination', DestinationController::class);
+    Route::resource('/expediteur', ExpediteurController::class);
 });
 
 require __DIR__.'/auth.php';

@@ -22,7 +22,6 @@ return new class extends Migration
             $table->unsignedBigInteger('destination_id')->nullable();
             $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade')->onUpdate('cascade');
             $table->text('observation')->nullable();
-            $table->enum('division', ['Administration', 'Ressource Humains', 'Gestion'])->nullable();
             $table->string('document')->nullable();
             $table->timestamps();
         });

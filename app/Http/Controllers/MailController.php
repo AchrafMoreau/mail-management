@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
 use App\Models\Mail;
 use Illuminate\Http\Request;
+use App\Models\Destination;
+use App\Models\Ville;
+use App\Models\Expediteur;
+use App\Models\TempFile;
 
 class MailController extends Controller
 {
@@ -13,7 +18,7 @@ class MailController extends Controller
     public function index()
     {
         //
-        $mails = Mail::orderBy('created_at', 'desc')->get();
+        $mails = Mail::orderBy('id', 'desc')->get();
         return view("mails.index", ["mails" => $mails]);
     }
 
@@ -36,8 +41,9 @@ class MailController extends Controller
     {
         //
         $des = Destination::all();
+        $villes = Ville::all();
         $exp = Expediteur::all();
-        return view("mails.store", ["destination" => $des, "expediteur" => $exp]);
+        return view("mails.store", ["destination" => $des, "expediteur" => $exp, 'villes' => $villes]);
     }
 
     /**
@@ -46,23 +52,34 @@ class MailController extends Controller
     public function store(Request $req)
     {
         //
-        $req->validate([
+        $rules = [
             "object" => "required",
             "type" => 'required',
-            "division" => "required",
             "reception_jour" => "required",
-        ]);
+        ];
+
+        $validation = Validator::make($req->all(), $rules);
+        if($validation->fails()){
+            
+            $notification = array(
+                'message' => __('translation.thosFieldRequired') . " :<br>
+                    -   "  . __('translation.object') . "<br>
+                    -   "  . __('translation.reception_jour') . "<br>
+                    -   "  . __('translation.type'),
+                'alert-type' => 'error',
+            );
+            return redirect()->back()->with($notification);
+        }
 
         if($req->docs){
             $doc = TempFile::where("folder", $req->docs)->first();
             $sourcePath = storage_path('app/private/docs/temp/' . $doc->folder . '/' . $doc->filename);
             Storage::disk('public')->put($doc->filename, file_get_contents($sourcePath));
 
-            // dd($doc->filename, $req->reception_time);
             Mail::create([
                 "object" => $req->object,
-                "emetteur_id" => $req->emetteur,
-                "division" => $req->division,
+                "destination_id" => $req->destination ?? null,
+                "expediteur_id" => $req->expediteur ?? null,
                 "observation" => $req->observation,
                 "reception_jour" => $req->reception_jour,
                 "reception_heure" => $req->reception_time,
@@ -74,8 +91,7 @@ class MailController extends Controller
                 'message' => 'Mail Created successfully',
                 'alert-type' => 'success',
             );
-            // return redirect()->back()->with($notification);
-            return redirect('/courrire')->with($notification);
+            return redirect('/mail')->with($notification);
         }
 
         $courrire = Mail::create([
@@ -91,77 +107,93 @@ class MailController extends Controller
             'message' => 'Mail Created successfully',
             'alert-type' => 'success'
         );
-        return redirect('/courrire')->with($notification);
+        return redirect('/mail')->with($notification);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Mail $courrire)
+    public function show(Mail $mail)
     {
         //
-        // $courrires = Mail::with('emetteur')->where('id', $courrire->id)->get();
-        $courrire->load('emetteur');
-        return view('courrire.show', ["courrire" => $courrire]);
+        $mail->load('destination', 'expediteur');
+        return view('mails.show', ["mail" => $mail]);
 
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Mail $courrire)
+    public function edit(Mail $mail)
     {
         //
-        $emetteurs = Emetteur::all();
-        return view("courrire.edit", ["courrire" => $courrire, "emetteurs" => $emetteurs]);
+        $des = Destination::all();
+        $villes = Ville::all();
+        $exp = Expediteur::all();
+        return view("mails.edit", ["mail" => $mail->load('destination', 'expediteur'), "destination" => $des, "expediteur" => $exp, 'villes' => $villes]);
+        // $emetteurs = Emetteur::all();
+        // return view("courrire.edit", ["courrire" => $courrire, "emetteurs" => $emetteurs]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $req, Mail $courrire)
+    public function update(Request $req, Mail $mail)
     {
         //
-        $req->validate([
+
+        $rules = [
             "object" => "required",
             "type" => 'required',
-            "emetteur" => "required",
-            "division" => "required",
             "reception_jour" => "required",
-        ]);
+        ];
 
-        $courrire->object = $req->object;
-        $courrire->type = $req->type;
-        $courrire->emetteur_id = $req->emetteur;
-        $courrire->division = $req->division;
-        $courrire->observation = $req->observation;
-        $courrire->reception_jour = $req->reception_jour;
-        $courrire->reception_heure = $req->reception_time;
+        $validation = Validator::make($req->all(), $rules);
+        if($validation->fails()){
+            
+            $notification = array(
+                'message' => __('translation.thosFieldRequired') . " :<br>
+                    -   "  . __('translation.object') . "<br>
+                    -   "  . __('translation.reception_jour') . "<br>
+                    -   "  . __('translation.type'),
+                'alert-type' => 'error',
+            );
+            return redirect()->back()->with($notification);
+        }
+
+
+        $mail->object = $req->object;
+        $mail->type = $req->type;
+        $mail->destination_id = $req->destination ?? null;
+        $mail->expediteur_id = $req->expediteur ?? null;
+        $mail->observation = $req->observation;
+        $mail->reception_jour = $req->reception_jour;
+        $mail->reception_heure = $req->reception_time;
 
         if($req->docs){
             $doc = TempFile::where("folder", $req->docs)->first();
             $sourcePath = storage_path('app/private/docs/temp/' . $doc->folder . '/' . $doc->filename);
             Storage::disk('public')->put($doc->filename, file_get_contents($sourcePath));
-            $courrire->document = $doc->filename;
+            $mail->document = $doc->filename;
         }
 
-        $courrire->save();
+        $mail->save();
 
         $notification = array(
             'message' => 'Mail Updated successfully',
             'alert-type' => 'success'
         );
-        return redirect('/courrire')->with($notification);
+        return redirect('/mail')->with($notification);
 
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Mail $courrire)
+    public function destroy(Mail $mail)
     {
         //
-        Mail::where('id', $courrire->id)->delete();
+        Mail::where('id', $mail->id)->delete();
         $notification = array(
             'message' => 'Mail Deleted successfully',
             'alert-type' => 'success'
@@ -234,6 +266,25 @@ class MailController extends Controller
         }
 
         return response()->json(["totalPersentage" => number_format($entrantPersentage, 2), "total" => $entrantMails]);
+    }
+
+    public function courrieFilter(Request $req)
+    {
+        if($req->type == "all" && $req->year == "all"){
+            $mails = Mail::orderBy('id', "desc")->get();
+            return view("mails.index", ["mails" => $mails, "sType" => $req->type, "count" => $mails->count(), "sYear" => $req->year ]);
+        }
+        if($req->type == "all" && $req->year != "all"){
+            $mails = Mail::whereRaw("YEAR(reception_jour) = ?", [$req->year])->orderBy('id', "desc")->get();
+            return view("mails.index", ["mails" => $mails, "sType" => $req->type, "count" => $mails->count(), "sYear" => $req->year ]);
+        }
+        if($req->type != "all" && $req->year == "all"){
+            $mails = Mail::where('type', $req->type)->orderBy('id', "desc")->get();
+            return view("mails.index", ["mails" => $mails ,"sType" => $req->type, "count" => $mails->count(), "sYear" => $req->year ]);
+        }
+
+        $mails = Mail::where('type', $req->type)->whereRaw("YEAR(reception_jour) = ?" , [$req->year])->orderBy('id', "desc")->get();
+        return view("mails.index", ["mails" => $mails, "sType" => $req->type, "count" => $mails->count(), "sYear" => $req->year ]);
     }
 
 }

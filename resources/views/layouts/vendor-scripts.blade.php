@@ -8,19 +8,52 @@
 <script src="{{ URL::asset('build/js/pages/plugins/lord-icon-2.1.0.js') }}"></script>
 <script src="{{ URL::asset('build/js/plugins.js') }}"></script>
 <script>
-    const clientSelectElement = document.querySelector('#selectEmetteur');
-    if(clientSelectElement){
-        const clientSelect = new Choices(clientSelectElement, {
-            searchEnabled: true,
+    var exp = document.getElementById("selectExpediteur"),
+        des = document.getElementById("selectDistination"),
+        ville = document.getElementById("ville-field"),
+        year = document.getElementById('yearSelect');
+        type = document.getElementById('typeSelect');
+
+    if(year){
+        new Choices(year, {
+            searchEnabled: false,
             itemSelectText: '',
-        });
+            shouldSort: false,
+        })
+        new Choices(type, {
+            searchEnabled: false,
+            itemSelectText: '',
+            shouldSort: false,
+        })
     }
+
+    if(exp){
+        var expVal = new Choices(exp),
+            desVal = new Choices(des);
+    }
+    if(ville){
+        var villeVal = new Choices(ville);
+    }
+    // const expSelector = document.querySelector('#selectExpediteur');
+    // const desSelector = document.querySelector('#selectDistination');
+    // if(expSelector){
+    //     const expChoices = new Choices(expSelector, {
+    //         searchEnabled: true,
+    //         itemSelectText: '',
+    //     });
+    //     const desChoices = new Choices(desSelector, {
+    //         searchEnabled: true,
+    //         itemSelectText: '',
+    //     });
+    // }
 </script>
 
 <script>
+    
     @if (Session::has('message'))
         var type = "{{ Session::get('alert-type', 'info') }}";
-        var message = "{{ Session::get('message') }}";
+        var message = `{!! Session::get('message') !!}`;
+        console.log(message);
         
         switch (type) {
             case 'info':

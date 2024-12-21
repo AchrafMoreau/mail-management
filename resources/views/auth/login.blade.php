@@ -97,9 +97,8 @@
                     <div class="col-lg-12">
                         <div class="text-center">
                             <script>
-                                document.write(new Date().getFullYear())
-                            </script>Maroc Meteo Crafted with <i
-                                    class="mdi mdi-heart text-danger"></i> Moreau</p>
+                                document.write(new Date().getFullYear()) 
+                            </script> © Maroc Meteo Crafted with Moreau Achraf</p>
                         </div>
                     </div>
                 </div>

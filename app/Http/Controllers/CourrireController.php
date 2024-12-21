@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
 use App\Models\Courrire;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Destination;
+use App\Models\Ville;
 use App\Models\Expediteur;
 use App\Models\TempFile;
 use Illuminate\Http\Request;
@@ -18,19 +20,19 @@ class CourrireController extends Controller
     public function index()
     {
         //
-        $courrires = Courrire::orderBy('created_at', 'desc')->get();
+        $courrires = Courrire::orderBy('id', 'desc')->get();
         return view("courrire.index", ["courrire" => $courrires]);
     }
 
     public function sortantCourrire()
     {
-        $courrires = Courrire::where("type", "SORTANT")->with('emetteur')->orderBy('created_at', 'desc')->get();
+        $courrires = Courrire::where("type", "SORTANT")->orderBy('created_at', 'desc')->get();
         return view("courrire.index", ["courrire" => $courrires]);
     }
 
     public function entantCourrire()
     {
-        $courrires = Courrire::where("type", "ENTRANT")->with('emetteur')->orderBy('created_at', 'desc')->get();
+        $courrires = Courrire::where("type", "ENTRANT")->orderBy('created_at', 'desc')->get();
         return view("courrire.index", ["courrire" => $courrires]);
     }
 
@@ -41,8 +43,9 @@ class CourrireController extends Controller
     {
         //
         $des = Destination::all();
+        $villes = Ville::all();
         $exp = Expediteur::all();
-        return view("courrire.store", ["destination" => $des, "expediteur" => $exp]);
+        return view("courrire.store", ["destination" => $des, "expediteur" => $exp, 'villes' => $villes]);
         // return view("courrire.store", ["emetteurs" => $emetteurs]);
     }
 
@@ -52,13 +55,26 @@ class CourrireController extends Controller
     public function store(Request $req)
     {
         //
-        $req->validate([
+
+        $rules = [
             "object" => "required",
             "type" => 'required',
-            "emetteur" => "required",
-            "division" => "required",
             "reception_jour" => "required",
-        ]);
+        ];
+
+        $validation = Validator::make($req->all(), $rules);
+        if($validation->fails()){
+            
+            $notification = array(
+                'message' => __('translation.thosFieldRequired') . " :<br>
+                    -   "  . __('translation.object') . "<br>
+                    -   "  . __('translation.reception_jour') . "<br>
+                    -   "  . __('translation.type'),
+                'alert-type' => 'error',
+            );
+            return redirect()->back()->with($notification);
+        }
+
 
         if($req->docs){
             $doc = TempFile::where("folder", $req->docs)->first();
@@ -68,8 +84,9 @@ class CourrireController extends Controller
             // dd($doc->filename, $req->reception_time);
             Courrire::create([
                 "object" => $req->object,
-                "emetteur_id" => $req->emetteur,
-                "division" => $req->division,
+                "type" => $req->type,
+                "destination_id" => $req->destination ?? null,
+                "expediteur_id" => $req->expediteur ?? null,
                 "observation" => $req->observation,
                 "reception_jour" => $req->reception_jour,
                 "reception_heure" => $req->reception_time,
@@ -87,8 +104,9 @@ class CourrireController extends Controller
 
         $courrire = Courrire::create([
             "object" => $req->object,
-            "emetteur_id" => $req->emetteur,
-            "division" => $req->division,
+            "type" => $req->type,
+            "destination_id" => $req->destination ?? null,
+            "expediteur_id" => $req->expediteur ?? null,
             "observation" => $req->observation,
             "reception_jour" => $req->reception_jour,
             "reception_heure" => $req->reception_time,
@@ -108,7 +126,7 @@ class CourrireController extends Controller
     {
         //
         // $courrires = Courrire::with('emetteur')->where('id', $courrire->id)->get();
-        $courrire->load('emetteur');
+        $courrire->load('destination', 'expediteur');
         return view('courrire.show', ["courrire" => $courrire]);
 
     }
@@ -119,8 +137,10 @@ class CourrireController extends Controller
     public function edit(Courrire $courrire)
     {
         //
-        $emetteurs = Emetteur::all();
-        return view("courrire.edit", ["courrire" => $courrire, "emetteurs" => $emetteurs]);
+        $des = Destination::all();
+        $villes = Ville::all();
+        $exp = Expediteur::all();
+        return view("courrire.edit", ["courrire" => $courrire->load('destination', 'expediteur'), "destination" => $des, "expediteur" => $exp, 'villes' => $villes]);
     }
 
     /**
@@ -129,19 +149,30 @@ class CourrireController extends Controller
     public function update(Request $req, Courrire $courrire)
     {
         //
-        $req->validate([
+        $rules = [
             "object" => "required",
             "type" => 'required',
-            "emetteur" => "required",
-            "division" => "required",
             "reception_jour" => "required",
-        ]);
+        ];
+
+        $validation = Validator::make($req->all(), $rules);
+        if($validation->fails()){
+            
+            $notification = array(
+                'message' => __('translation.thosFieldRequired') . " :<br>
+                    -   "  . __('translation.object') . "<br>
+                    -   "  . __('translation.reception_jour') . "<br>
+                    -   "  . __('translation.type'),
+                'alert-type' => 'error',
+            );
+            return redirect()->back()->with($notification);
+        }
 
         $courrire->object = $req->object;
         $courrire->type = $req->type;
-        $courrire->emetteur_id = $req->emetteur;
-        $courrire->division = $req->division;
         $courrire->observation = $req->observation;
+        $courrire->destination_id = $req->destination ?? null;
+        $courrire->expediteur_id = $req->expediteur ?? null;
         $courrire->reception_jour = $req->reception_jour;
         $courrire->reception_heure = $req->reception_time;
 
@@ -243,4 +274,22 @@ class CourrireController extends Controller
         return response()->json(["totalPersentage" => number_format($entrantPersentage, 2), "total" => $entrantMails]);
     }
 
+    public function courrieFilter(Request $req)
+    {
+        if($req->type == "all" && $req->year == "all"){
+            $courrires = Courrire::orderBy('id', "desc")->get();
+            return view("courrire.index", ["courrire" => $courrires, "sType" => $req->type, "count" => $courrires->count(), "sYear" => $req->year ]);
+        }
+        if($req->type == "all" && $req->year != "all"){
+            $courrires = Courrire::whereRaw("YEAR(reception_jour) = ?", [$req->year])->orderBy('id', "desc")->get();
+            return view("courrire.index", ["courrire" => $courrires, "sType" => $req->type, "count" => $courrires->count(), "sYear" => $req->year ]);
+        }
+        if($req->type != "all" && $req->year == "all"){
+            $courrires = Courrire::where('type', $req->type)->orderBy('id', "desc")->get();
+            return view("courrire.index", ["courrire" => $courrires ,"sType" => $req->type, "count" => $courrires->count(), "sYear" => $req->year ]);
+        }
+
+        $courrires = Courrire::where('type', $req->type)->whereRaw("YEAR(reception_jour) = ?" , [$req->year])->orderBy('id', "desc")->get();
+        return view("courrire.index", ["courrire" => $courrires, "sType" => $req->type, "count" => $courrires->count(), "sYear" => $req->year ]);
+    }
 }

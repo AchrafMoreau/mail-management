@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-    @lang('translation.courrire')
+    @lang('translation.mail')
 @endsection
 @section('css')
     <link href="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
@@ -10,10 +10,10 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title mb-0">@lang("translation.courrire-list")</h4>
+                    <h4 class="card-title mb-0">@lang("translation.mail-list")</h4>
                 </div><!-- end card header -->
                 <div class="card-body border border-dashed border-end-0 border-start-0">
-                    <form action="{{ url('/courrie-filter') }}" method="POST" >
+                    <form action="{{ url('/mail-filter') }}" method="POST" >
                         @csrf
                         @method("POST")
                         <div class="row g-3">
@@ -28,7 +28,6 @@
                                 </div>
                             </div>
                             <!--end col-->
-
                             <div class="col-xxl-3 col-sm-4">
                                 <div class="input-light">
                                     <select class="form-control"
@@ -57,10 +56,10 @@
                         <div class="row g-4 mb-3">
                             <div class="col-sm-auto">
                                 <div>
-                                    <a href="{{ url('/courrire/create') }}">
+                                    <a href="{{ url('/mail/create') }}">
                                         <button class="btn btn-primary add-btn"  id="create-btn" >
                                             <i class="ri-add-line align-bottom me-1"></i>
-                                            @lang("translation.addCourrier")
+                                            @lang("translation.addMail")
                                         </button>
                                     </a>
                                     <button class="btn btn-soft-danger" onClick="deleteMultiple()"><i
@@ -95,7 +94,7 @@
                                     </tr>
                                 </thead>
                                 <tbody class="list form-check-all">
-                                    @foreach($courrire as $cour)
+                                    @foreach($mails as $mail)
                                     <tr>
                                         <th scope="row">
                                             <div class="form-check">
@@ -103,12 +102,12 @@
                                                     value="option1">
                                             </div>
                                         </th>
-                                        <td class="id px-3"><a href="courrire/{{ $cour->id }}"
-                                                class="fw-medium link-primary">{{ $cour->id }}</a></td>
-                                        <td class="object">{{ $cour->object }}</td>
-                                        <td class="reception-jour">{{ $cour->reception_jour }}</td>
+                                        <td class="id px-3"><a href="mail/{{ $mail->id }}"
+                                                class="fw-medium link-primary">{{ $mail->id }}</a></td>
+                                        <td class="object">{{ $mail->object }}</td>
+                                        <td class="reception-jour">{{ $mail->reception_jour }}</td>
                                         <td class="type">
-                                            @if($cour->type == "ENTRANT")
+                                            @if($mail->type == "ENTRANT")
                                             <span class="badge bg-success-subtle text-success text-uppercase">@lang("translation.entrant")</span>
                                             @else
                                             <span class="badge bg-danger-subtle text-danger text-uppercase">@lang("translation.sortant")</span>
@@ -117,14 +116,14 @@
                                         <td>
                                             <div class="d-flex gap-2">
                                                 <div class="view">
-                                                    <a href="{{ url( '/courrire'.'/'.$cour->id )}}">
+                                                    <a href="{{ url( '/mail'.'/'.$mail->id )}}">
                                                     <button class="btn btn-sm btn-success edit-item-btn">
                                                         <i class='ri-eye-fill align-middle'></i>
                                                     </button>
                                                     </a>
                                                 </div>
                                                 <div class="edit">
-                                                    <a href="{{ url( '/courrire'.'/'.$cour->id. '/edit')}}">
+                                                    <a href="{{ url( '/mail'.'/'.$mail->id. '/edit')}}">
                                                     <button class="btn btn-sm btn-primary edit-item-btn">
                                                         <i class="ri-pencil-fill align-bottom"></i>
                                                     </button>
@@ -176,71 +175,6 @@
     <!-- end row -->
 
 
-
-    <div class="modal fade" id="showModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-light p-3">
-                    <h5 class="modal-title" id="exampleModalLabel"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-                        id="close-modal"></button>
-                </div>
-                <form class="tablelist-form" autocomplete="off">
-                    <div class="modal-body">
-                        <div class="mb-3" id="modal-id" style="display: none;">
-                            <label for="id-field" class="form-label">ID</label>
-                            <input type="text" id="id-field" class="form-control" placeholder="ID" readonly />
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="customername-field" class="form-label">Customer Name</label>
-                            <input type="text" id="customername-field" class="form-control" placeholder="Enter Name"
-                                required />
-                            <div class="invalid-feedback">Please enter a customer name.</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="email-field" class="form-label">Email</label>
-                            <input type="email" id="email-field" class="form-control" placeholder="Enter Email"
-                                required />
-                            <div class="invalid-feedback">Please enter an email.</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="phone-field" class="form-label">Phone</label>
-                            <input type="text" id="phone-field" class="form-control" placeholder="Enter Phone no."
-                                required />
-                            <div class="invalid-feedback">Please enter a phone.</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="date-field" class="form-label">Joining Date</label>
-                            <input type="text" id="date-field" class="form-control" placeholder="Select Date"
-                                required />
-                            <div class="invalid-feedback">Please select a date.</div>
-                        </div>
-
-                        <div>
-                            <label for="status-field" class="form-label">Status</label>
-                            <select class="form-control" data-trigger name="status-field" id="status-field" required>
-                                <option value="">Status</option>
-                                <option value="Active">Active</option>
-                                <option value="Block">Block</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <div class="hstack gap-2 justify-content-end">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-success" id="add-btn">Add Customer</button>
-                            <!-- <button type="button" class="btn btn-success" id="edit-btn">Update</button> -->
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <!-- Modal -->
     <div class="modal fade zoomIn" id="deleteRecordModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -278,7 +212,7 @@
 
     <script src="{{ URL::asset('build/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ URL::asset('build/js/app.js') }}"></script>
-    <script src="{{ URL::asset('build/js/pages/courrie-list.js') }}"></script>
+    <script src="{{ URL::asset('build/js/pages/mail-list.js') }}"></script>
     <script>
         const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
