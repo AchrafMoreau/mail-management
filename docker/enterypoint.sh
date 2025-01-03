@@ -24,6 +24,7 @@ php artisan db:seed
 php artisan cache:clear
 php artisan config:clear
 php artisan route:clear
+php artisan link:storage
 
 
 php artisan serve --port=${APP_PORT:-8080} --host=0.0.0.0 --env=.env

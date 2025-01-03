@@ -54,7 +54,7 @@ return [
     "morningMessage" => "Here’s what’s happening with your work today.",
     "totalMails" => "Total Mails",
     "viewTotalMails" => "View all Mails",
-    "entrantMails" => "Incoming Mails",
+    "entrantCourrier" => "Incoming Mails",
     "viewEntantMails" => "View Incoming Mails",
     "sortantMails" => "Outgoing Mails",
     "viewSortantMails" => "View Outgoing Mails",

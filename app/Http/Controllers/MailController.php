@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 use App\Models\Mail;
 use Illuminate\Http\Request;
 use App\Models\Destination;
@@ -24,13 +25,13 @@ class MailController extends Controller
 
     public function sortantMail()
     {
-        $mails = Mail::where("type", "SORTANT")->with('emetteur')->orderBy('created_at', 'desc')->get();
+        $mails = Mail::where("type", "SORTANT")->orderBy('id', 'desc')->get();
         return view("mails.index", ["mails" => $mails]);
     }
 
     public function entantMail()
     {
-        $mails = Mail::where("type", "ENTRANT")->with('emetteur')->orderBy('created_at', 'desc')->get();
+        $mails = Mail::where("type", "ENTRANT")->orderBy('id', 'desc')->get();
         return view("mails.index", ["mails" => $mails]);
     }
 
@@ -217,22 +218,6 @@ class MailController extends Controller
         return response()->json($notification);
     }
 
-    public function getTotalMailPersentage()
-    {
-        $currentMonths = Carbon::now()->month;
-        $lastMonths = Carbon::now()->subMonth()->month;
-
-        $mailSendCurrentMonths = Mail::whereMonth("reception_jour", $currentMonths)->count();
-        $mailSendLastMonths = Mail::whereMonth("reception_jour", $lastMonths)->count();
-        $allMails = Mail::all()->count();
-
-        $totalPersentage = 0;
-        if($mailSendLastMonths > 0){
-            $totalPersentage = (($mailSendCurrentMonths - $mailSendLastMonths) / $mailSendLastMonths ) * 100;
-        }
-
-        return response()->json(["totalPersentage" => number_format($totalPersentage, 2), "total" => $allMails]);
-    }
 
     public function getSortantMailPersentage()
     {

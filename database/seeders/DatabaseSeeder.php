@@ -55,10 +55,10 @@ class DatabaseSeeder extends Seeder
 
         }
 
-        Expediteur::factory(10)->create();
-        Destination::factory(10)->create();
-        Courrire::factory(100)->create();
-        Mail::factory(50)->create();
+        // Expediteur::factory(10)->create();
+        // Destination::factory(10)->create();
+        // Courrire::factory(100)->create();
+        // Mail::factory(50)->create();
         
         $this->command->info('Seeder imported successfully!');
         

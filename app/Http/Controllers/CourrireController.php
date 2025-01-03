@@ -26,13 +26,13 @@ class CourrireController extends Controller
 
     public function sortantCourrire()
     {
-        $courrires = Courrire::where("type", "SORTANT")->orderBy('created_at', 'desc')->get();
+        $courrires = Courrire::where("type", "SORTANT")->orderBy('id', 'desc')->get();
         return view("courrire.index", ["courrire" => $courrires]);
     }
 
     public function entantCourrire()
     {
-        $courrires = Courrire::where("type", "ENTRANT")->orderBy('created_at', 'desc')->get();
+        $courrires = Courrire::where("type", "ENTRANT")->orderBy('id', 'desc')->get();
         return view("courrire.index", ["courrire" => $courrires]);
     }
 
@@ -223,22 +223,6 @@ class CourrireController extends Controller
         return response()->json($notification);
     }
 
-    public function getTotalMailPersentage()
-    {
-        $currentMonths = Carbon::now()->month;
-        $lastMonths = Carbon::now()->subMonth()->month;
-
-        $mailSendCurrentMonths = Courrire::whereMonth("reception_jour", $currentMonths)->count();
-        $mailSendLastMonths = Courrire::whereMonth("reception_jour", $lastMonths)->count();
-        $allMails = Courrire::all()->count();
-
-        $totalPersentage = 0;
-        if($mailSendLastMonths > 0){
-            $totalPersentage = (($mailSendCurrentMonths - $mailSendLastMonths) / $mailSendLastMonths ) * 100;
-        }
-
-        return response()->json(["totalPersentage" => number_format($totalPersentage, 2), "total" => $allMails]);
-    }
 
     public function getSortantMailPersentage()
     {

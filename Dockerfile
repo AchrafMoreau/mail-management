@@ -8,6 +8,10 @@ WORKDIR /var/www
 
 # Install dependencies
 RUN apt-get update && apt-get install -y \
+    curl \
+    gnupg \
+    && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
     build-essential \
     libpng-dev \
     libjpeg62-turbo-dev \

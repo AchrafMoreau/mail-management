@@ -34,8 +34,8 @@ Route::middleware(['auth', 'clearNotification'])->group(function () {
 
 
     Route::resource("/mail", MailController::class);
-    Route::get("/entrant-mail", [MailController::class, "entantCourrire"]);
-    Route::get("/sortant-mail", [MailController::class, "sortantCourrire"]);
+    Route::get("/entrant-mail", [MailController::class, "entantMail"]);
+    Route::get("/sortant-mail", [MailController::class, "sortantMail"]);
     Route::delete("/mail-deleteMany", [MailController::class, "deleteMany"]);
     Route::post("/mail-filter", [MailController::class, "courrieFilter"]);
 
@@ -56,10 +56,10 @@ Route::middleware(['auth', 'clearNotification'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/total-mail-persentage', [CourrireController::class, 'getTotalMailPersentage']);
-    Route::get('/entrant-mail-persentage', [CourrireController::class, 'getEntrantMailPersentage']);
-    Route::get('/sortant-mail-persentage', [CourrireController::class, 'getSortantMailPersentage']);
-    Route::get('/total-decharge-persentage', [DechargeController::class, 'getTotalDechargePersentage']);
+    Route::get('/entrant-mail-persentage', [MailController::class, 'getEntrantMailPersentage']);
+    Route::get('/sortant-mail-persentage', [MailController::class, 'getSortantMailPersentage']);
+    Route::get('/entrant-courrier-persentage', [CourrireController::class, 'getEntrantMailPersentage']);
+    Route::get('/sortant-courrier-persentage', [CourrireController::class, 'getSortantMailPersentage']);
 
 
     Route::resource('/setting', SettingController::class);
