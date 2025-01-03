@@ -12,6 +12,8 @@ services:
       - MYSQL_DATABASE=${DB_DATABASE}
     volumes:
       - db-data:/var/lib/mysql
+    networks:
+      - app-network
 
   php:
     build:
@@ -28,7 +30,6 @@ services:
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - APP_ENV=${APP_ENV}
-      - CONTAINER_ROLE=app
     working_dir: /var/www
     volumes:
         - ./:/var/www
@@ -36,6 +37,12 @@ services:
         - "8080:8080"
     depends_on:
         - mysql
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   db-data: ~
