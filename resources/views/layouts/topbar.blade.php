@@ -89,13 +89,13 @@
 
                 <div class="ms-1 header-item d-none d-sm-flex">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" data-toggle="fullscreen">
-                        <i class='bx bx-fullscreen fs-22'></i>
+                        <i class='ri-fullscreen-fill fs-22'></i>
                     </button>
                 </div>
 
                 <div class="ms-1 header-item d-none d-sm-flex">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle light-dark-mode">
-                        <i class='bx bx-moon fs-22'></i>
+                        <i class='ri-moon-line fs-22'></i>
                     </button>
                 </div>
 
@@ -132,7 +132,7 @@
                         <h6 class="dropdown-header">@lang("translation.welcome") {{ Auth::user()->name }}</h6>
                         <a class="dropdown-item" href="{{ url('/profile')}}"><i class="ri-account-circle-line text-muted fs-16 align-middle me-1"></i> <span class="align-middle">@lang("translation.profile")</span></a>
                         <a class="dropdown-item" href="{{ url('/setting')}}"><i class="ri-settings-4-line text-muted fs-16 align-middle me-1"></i> <span class="align-middle">@lang("translation.settings")</span></a>
-                        <a class="dropdown-item " href="javascript:void();" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="bx bx-power-off font-size-16 align-middle me-1 text-muted"></i> <span key="t-logout">@lang('translation.logout')</span></a>
+                        <a class="dropdown-item " href="javascript:void();" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class=" ri-logout-box-r-line font-size-16 align-middle me-1 text-muted"></i> <span key="t-logout">@lang('translation.logout')</span></a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
